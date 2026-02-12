@@ -401,6 +401,43 @@
       margin: 0 auto;
     }
 
+    .sns-fallback-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 3rem 2rem;
+      text-decoration: none;
+      color: var(--color-deep);
+      transition: opacity 0.3s;
+    }
+
+    .sns-fallback-card:hover {
+      opacity: 0.7;
+    }
+
+    .sns-fallback-icon svg {
+      fill: var(--color-deep);
+    }
+
+    .sns-fallback-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    .sns-fallback-handle {
+      font-size: 0.85rem;
+      color: var(--color-gold);
+    }
+
+    .sns-fallback-cta {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--color-gold);
+      letter-spacing: 0.1em;
+    }
+
     /* ── Access ── */
     .access {
       background: var(--color-cream);
@@ -777,9 +814,24 @@
       <h2 class="section-title">最新<span class="accent">情報</span></h2>
       <div class="gold-line"></div>
       <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはこちらから。</p>
-      <div class="twitter-embed">
-        <a class="twitter-timeline" href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">Tweets by karafuto_</a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      <div class="twitter-embed" id="twitter-container">
+        <a class="twitter-timeline"
+           data-height="500"
+           data-lang="ja"
+           data-chrome="noheader nofooter noborders transparent"
+           href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">
+        </a>
+        <!-- フォールバック: 読み込み失敗時に表示 -->
+        <div id="twitter-fallback" style="display:none;">
+          <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="sns-fallback-card">
+            <div class="sns-fallback-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </div>
+            <span class="sns-fallback-name">樺太食堂</span>
+            <span class="sns-fallback-handle">@karafuto_</span>
+            <span class="sns-fallback-cta">X で最新情報を見る →</span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -875,7 +927,36 @@
     </div>
   </footer>
 
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <script>
+    // ── Twitter Widget with retry ──
+    (function() {
+      var maxRetries = 3;
+      var attempt = 0;
+      var fallback = document.getElementById('twitter-fallback');
+      var container = document.getElementById('twitter-container');
+
+      function checkLoaded() {
+        attempt++;
+        var iframe = container.querySelector('iframe.twitter-timeline');
+        if (iframe) return; // loaded OK
+        if (attempt >= maxRetries) {
+          // show fallback card
+          if (fallback) fallback.style.display = 'block';
+          var link = container.querySelector('a.twitter-timeline');
+          if (link) link.style.display = 'none';
+          return;
+        }
+        // retry: reload widget
+        if (window.twttr && twttr.widgets) {
+          twttr.widgets.load(container);
+        }
+        setTimeout(checkLoaded, 3000);
+      }
+
+      setTimeout(checkLoaded, 4000);
+    })();
+
     // ── Slider ──
     const slides = document.querySelectorAll('.slide');
     const indicators = document.querySelectorAll('#indicators button');
