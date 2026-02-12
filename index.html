@@ -399,6 +399,32 @@
       max-height: 600px;
       overflow-y: auto;
       margin: 0 auto;
+      min-height: 200px;
+    }
+
+    .twitter-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 3rem 1rem;
+      color: #999;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+    }
+
+    .loading-spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #e0e0e0;
+      border-top-color: var(--color-gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .sns-fallback-card {
@@ -815,6 +841,10 @@
       <div class="gold-line"></div>
       <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはこちらから。</p>
       <div class="twitter-embed" id="twitter-container">
+        <div id="twitter-loading" class="twitter-loading">
+          <div class="loading-spinner"></div>
+          <span>ポストを読み込んでいます…</span>
+        </div>
         <a class="twitter-timeline"
            data-height="500"
            data-lang="ja"
@@ -934,20 +964,27 @@
       var maxRetries = 3;
       var attempt = 0;
       var fallback = document.getElementById('twitter-fallback');
+      var loading = document.getElementById('twitter-loading');
       var container = document.getElementById('twitter-container');
+
+      function hideLoading() {
+        if (loading) loading.style.display = 'none';
+      }
 
       function checkLoaded() {
         attempt++;
         var iframe = container.querySelector('iframe.twitter-timeline');
-        if (iframe) return; // loaded OK
+        if (iframe) {
+          hideLoading();
+          return;
+        }
         if (attempt >= maxRetries) {
-          // show fallback card
+          hideLoading();
           if (fallback) fallback.style.display = 'block';
           var link = container.querySelector('a.twitter-timeline');
           if (link) link.style.display = 'none';
           return;
         }
-        // retry: reload widget
         if (window.twttr && twttr.widgets) {
           twttr.widgets.load(container);
         }
