@@ -274,29 +274,51 @@
       letter-spacing: 0.08em;
     }
 
-    .about-anniversary-badge {
-      display: inline-flex;
+    .anniversary {
+      display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-top: 3rem;
-      padding: 1.5rem 3rem;
-      border: 1px solid var(--color-gold);
-      background: transparent;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 3.5rem;
     }
 
-    .about-anniversary-badge .number {
-      font-size: 3rem;
+    .anniversary-line {
+      flex: 1;
+      max-width: 80px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--color-gold));
+    }
+
+    .anniversary-line:last-child {
+      background: linear-gradient(to left, transparent, var(--color-gold));
+    }
+
+    .anniversary-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .anniversary-number {
+      font-size: 4.5rem;
       font-weight: 900;
       color: var(--color-gold);
       line-height: 1;
+      letter-spacing: -0.02em;
     }
 
-    .about-anniversary-badge .text {
-      font-size: 0.85rem;
+    .anniversary-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      color: var(--color-gold);
+      margin-top: 0.3rem;
+    }
+
+    .anniversary-year-start,
+    .anniversary-year-end {
+      font-size: 0.8rem;
       letter-spacing: 0.2em;
-      color: var(--color-navy);
-      text-align: left;
-      line-height: 1.6;
+      color: #999;
     }
 
     /* ── Gallery ── */
@@ -714,12 +736,16 @@
         grid-template-columns: 1fr;
       }
 
-      .about-anniversary-badge {
-        padding: 1rem 1.5rem;
+      .anniversary {
+        gap: 1rem;
       }
 
-      .about-anniversary-badge .number {
-        font-size: 2.2rem;
+      .anniversary-number {
+        font-size: 3.5rem;
+      }
+
+      .anniversary-line {
+        max-width: 40px;
       }
     }
   </style>
@@ -798,9 +824,15 @@
         私たちはこれからも、一杯の丼に<br>
         北海道のすべてを込めてまいります。
       </p>
-      <div class="about-anniversary-badge">
-        <span class="number">50</span>
-        <span class="text">周年<br>1976 — 2026</span>
+      <div class="anniversary">
+        <div class="anniversary-line"></div>
+        <span class="anniversary-year-start">1976</span>
+        <div class="anniversary-center">
+          <span class="anniversary-number">50</span>
+          <span class="anniversary-label">th Anniversary</span>
+        </div>
+        <span class="anniversary-year-end">2026</span>
+        <div class="anniversary-line"></div>
       </div>
     </div>
   </section>
