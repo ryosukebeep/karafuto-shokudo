@@ -435,37 +435,8 @@
     .twitter-embed {
       background: var(--color-cream);
       border-radius: 8px;
-      padding: 1rem;
-      max-width: 550px;
-      max-height: 600px;
-      overflow-y: auto;
+      max-width: 400px;
       margin: 0 auto;
-      min-height: 200px;
-    }
-
-    .twitter-loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      padding: 3rem 1rem;
-      color: #999;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-    }
-
-    .twitter-loading-spinner {
-      width: 24px;
-      height: 24px;
-      border: 2px solid #e0e0e0;
-      border-top-color: var(--color-gold);
-      border-radius: 50%;
-      animation: twitterSpin 0.8s linear infinite;
-    }
-
-    @keyframes twitterSpin {
-      to { transform: rotate(360deg); }
     }
 
     .sns-fallback-card {
@@ -908,26 +879,15 @@
       <h2 class="section-title">最新<span class="accent">情報</span></h2>
       <div class="gold-line"></div>
       <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはXでお届けしています。</p>
-      <div class="twitter-embed" id="twitter-container">
-        <div class="twitter-loading" id="twitter-loading">
-          <div class="twitter-loading-spinner"></div>
-          <span>読み込み中…</span>
-        </div>
-        <a class="twitter-timeline"
-           data-height="500"
-           data-theme="light"
-           data-lang="ja"
-           href="https://twitter.com/karafuto_">@karafuto_ のポスト</a>
-        <div id="twitter-fallback" style="display:none;">
-          <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="sns-fallback-card">
-            <div class="sns-fallback-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </div>
-            <span class="sns-fallback-name">樺太食堂</span>
-            <span class="sns-fallback-handle">@karafuto_</span>
-            <span class="sns-fallback-cta">Xで最新情報をチェック →</span>
-          </a>
-        </div>
+      <div class="twitter-embed">
+        <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="sns-fallback-card">
+          <div class="sns-fallback-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          <span class="sns-fallback-name">樺太食堂</span>
+          <span class="sns-fallback-handle">@karafuto_</span>
+          <span class="sns-fallback-cta">Xで最新情報をチェック →</span>
+        </a>
       </div>
     </div>
   </section>
@@ -1081,50 +1041,6 @@
     }, { threshold: 0.15 });
 
     reveals.forEach(el => observer.observe(el));
-
-    // ── Xタイムライン遅延読み込み（スクロールで見えた時だけ読み込む） ──
-    (function() {
-      var snsSection = document.getElementById('sns');
-      var loaded = false;
-
-      var snsObserver = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !loaded) {
-          loaded = true;
-          snsObserver.disconnect();
-
-          var script = document.createElement('script');
-          script.src = 'https://platform.twitter.com/widgets.js';
-          script.charset = 'utf-8';
-          script.async = true;
-          document.body.appendChild(script);
-
-          // タイムライン読み込み完了チェック
-          var attempts = 0;
-          var check = setInterval(function() {
-            attempts++;
-            var container = document.getElementById('twitter-container');
-            var loading = document.getElementById('twitter-loading');
-            var fallback = document.getElementById('twitter-fallback');
-            var iframe = container && container.querySelector('iframe');
-
-            if (iframe) {
-              // タイムライン読み込み成功
-              clearInterval(check);
-              if (loading) loading.style.display = 'none';
-            } else if (attempts >= 10) {
-              // 10秒経っても読み込めなかった場合はフォールバック表示
-              clearInterval(check);
-              if (loading) loading.style.display = 'none';
-              if (fallback) fallback.style.display = 'block';
-              var timeline = container && container.querySelector('a.twitter-timeline');
-              if (timeline) timeline.style.display = 'none';
-            }
-          }, 1000);
-        }
-      }, { threshold: 0.1 });
-
-      if (snsSection) snsObserver.observe(snsSection);
-    })();
 
     // ── Show thank you banner when redirected after form submission ──
     (function() {
