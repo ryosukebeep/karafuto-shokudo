@@ -435,37 +435,8 @@
     .twitter-embed {
       background: var(--color-cream);
       border-radius: 8px;
-      padding: 1rem;
-      max-width: 550px;
-      max-height: 600px;
-      overflow-y: auto;
+      max-width: 400px;
       margin: 0 auto;
-      min-height: 200px;
-    }
-
-    .twitter-loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      padding: 3rem 1rem;
-      color: #999;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-    }
-
-    .loading-spinner {
-      width: 24px;
-      height: 24px;
-      border: 2px solid #e0e0e0;
-      border-top-color: var(--color-gold);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
     }
 
     .sns-fallback-card {
@@ -791,7 +762,7 @@
   <header id="header">
     <div class="header-logo">樺太食堂</div>
     <nav>
-      <a href="#about">私たちについて</a>
+      <a href="#about">当店について</a>
       <a href="#gallery">ギャラリー</a>
       <a href="#sns">最新情報</a>
       <a href="#access">アクセス</a>
@@ -846,19 +817,19 @@
   <!-- About -->
   <section class="about" id="about">
     <div class="reveal">
-      <p class="section-label">わたしたちについて</p>
-      <h2 class="section-title">半世紀の<span class="accent">想い</span>を、一杯に</h2>
+      <p class="section-label">当店について</p>
+      <h2 class="section-title">半世紀の<span class="accent">味</span>を、一杯に</h2>
       <div class="gold-line"></div>
       <p class="about-text">
-        一九七六年、北海道の冷たく澄んだ風の中で<br>
-        樺太食堂は小さな一歩を踏み出しました。<br><br>
-        以来五十年、変わらぬ信念がひとつ。<br>
-        北の海が育んだ最上の恵みを<br>
-        真心とともにお届けすること。<br><br>
-        時代は移ろえど、この土地の海が持つ<br>
-        力強さと繊細さは変わりません。<br>
-        私たちはこれからも、一杯の丼に<br>
-        稚内のすべてを込めてまいります。
+        昭和51年、稚内ノシャップ岬のそばに<br>
+        小さな食堂として店を開きました。<br><br>
+        名物「無敵の生うに丼」は<br>
+        利尻・礼文の海で獲れたエゾバフンウニを<br>
+        丼いっぱいに敷き詰めた当店自慢の一品です。<br><br>
+        おかげさまで今年で創業50年。<br>
+        これからも北海道の海の幸を<br>
+        まっすぐにお届けしてまいります。<br>
+        稚内にお越しの際は、ぜひお立ち寄りください。
       </p>
       <div class="anniversary">
         <div class="anniversary-line"></div>
@@ -907,12 +878,15 @@
       <p class="section-label">お知らせ</p>
       <h2 class="section-title">最新<span class="accent">情報</span></h2>
       <div class="gold-line"></div>
-      <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはこちらから。</p>
+      <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはXでお届けしています。</p>
       <div class="twitter-embed" id="twitter-container">
-        <a href="https://twitter.com/x?ref_src=twsrc%5Etfw"
-           class="twitter-follow-button"
-           data-show-count="false">
-          Follow @x
+        <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="sns-fallback-card">
+          <div class="sns-fallback-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          <span class="sns-fallback-name">樺太食堂</span>
+          <span class="sns-fallback-handle">@karafuto_</span>
+          <span class="sns-fallback-cta">Xで最新情報をチェック →</span>
         </a>
       </div>
     </div>
@@ -1013,43 +987,7 @@
     </div>
   </footer>
 
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <script>
-    // ── Twitter Widget with retry ──
-    (function() {
-      var maxRetries = 3;
-      var attempt = 0;
-      var fallback = document.getElementById('twitter-fallback');
-      var loading = document.getElementById('twitter-loading');
-      var container = document.getElementById('twitter-container');
-
-      function hideLoading() {
-        if (loading) loading.style.display = 'none';
-      }
-
-      function checkLoaded() {
-        attempt++;
-        var iframe = container.querySelector('iframe.twitter-timeline');
-        if (iframe) {
-          hideLoading();
-          return;
-        }
-        if (attempt >= maxRetries) {
-          hideLoading();
-          if (fallback) fallback.style.display = 'block';
-          var link = container.querySelector('a.twitter-timeline');
-          if (link) link.style.display = 'none';
-          return;
-        }
-        if (window.twttr && twttr.widgets) {
-          twttr.widgets.load(container);
-        }
-        setTimeout(checkLoaded, 3000);
-      }
-
-      setTimeout(checkLoaded, 4000);
-    })();
-
     // ── Slider ──
     const slides = document.querySelectorAll('.slide');
     const indicators = document.querySelectorAll('#indicators button');
