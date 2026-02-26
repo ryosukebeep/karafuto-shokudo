@@ -582,6 +582,22 @@
       margin: 0 auto 2.5rem;
     }
 
+    .thankyou-banner {
+      display: none;
+      margin-bottom: 2rem;
+      padding: 1.2rem 1rem;
+      background: #fff7e9;
+      border: 1px solid #f3cf8c;
+      color: #5a3a10;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+    }
+
+    .thankyou-banner.visible {
+      display: block;
+    }
+
     .contact-form {
       text-align: left;
     }
@@ -893,27 +909,9 @@
       <div class="gold-line"></div>
       <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはこちらから。</p>
       <div class="twitter-embed" id="twitter-container">
-        <div id="twitter-loading" class="twitter-loading">
-          <div class="loading-spinner"></div>
-          <span>ポストを読み込んでいます…</span>
-        </div>
-        <a class="twitter-timeline"
-           data-height="500"
-           data-lang="ja"
-           data-chrome="noheader nofooter noborders transparent"
-           href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">
+        <a class="twitter-timeline" href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">
+          Tweets by karafuto_
         </a>
-        <!-- フォールバック: 読み込み失敗時に表示 -->
-        <div id="twitter-fallback" style="display:none;">
-          <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="sns-fallback-card">
-            <div class="sns-fallback-icon">
-              <svg viewBox="0 0 24 24" width="28" height="28"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </div>
-            <span class="sns-fallback-name">樺太食堂</span>
-            <span class="sns-fallback-handle">@karafuto_</span>
-            <span class="sns-fallback-cta">X で最新情報を見る →</span>
-          </a>
-        </div>
       </div>
     </div>
   </section>
@@ -960,6 +958,10 @@
       <p class="section-label">お問い合わせ</p>
       <h2 class="section-title"><span class="accent">ご質問</span>・ご予約など</h2>
       <div class="gold-line"></div>
+      <div id="thankyou-banner" class="thankyou-banner">
+        お問い合わせありがとうございます。<br>
+        内容を確認のうえ、数日以内に折り返しご連絡させていただきます。
+      </div>
       <form action="https://formsubmit.co/25626c19aad6fff2bf638255290236c3" method="POST" class="contact-form">
         <!-- Formsubmit settings -->
         <input type="hidden" name="_cc" value="karafuto.info@unidon.jp">
@@ -967,7 +969,7 @@
         <input type="hidden" name="_captcha" value="true">
         <input type="hidden" name="_template" value="table">
         <input type="text" name="_honey" style="display:none">
-        <input type="hidden" name="_next" value="https://ryosukebeep.github.io/karafuto-shokudo/?sent=1">
+        <input type="hidden" name="_next" value="https://unidon.jp/?sent=1">
 
         <div class="form-group">
           <label for="name">お名前</label>
@@ -1099,6 +1101,25 @@
     }, { threshold: 0.15 });
 
     reveals.forEach(el => observer.observe(el));
+
+    // ── Show thank you banner when redirected after form submission ──
+    (function() {
+      try {
+        var params = new URLSearchParams(window.location.search || "");
+        if (params.get('sent') === '1') {
+          var banner = document.getElementById('thankyou-banner');
+          if (banner) {
+            banner.classList.add('visible');
+          }
+          var contactSection = document.getElementById('contact');
+          if (contactSection) {
+            contactSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      } catch (e) {
+        // fail silently
+      }
+    })();
   </script>
 
 </body>
