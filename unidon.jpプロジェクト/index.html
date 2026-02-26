@@ -434,9 +434,21 @@
 
     .twitter-embed {
       background: var(--color-cream);
-      border-radius: 8px;
-      max-width: 400px;
+      border-radius: 12px;
+      max-width: 550px;
       margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .twitter-embed iframe {
+      display: block;
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+
+    .twitter-embed .sns-fallback-card {
+      display: none;
     }
 
     .sns-fallback-card {
@@ -879,7 +891,12 @@
       <h2 class="section-title">最新<span class="accent">情報</span></h2>
       <div class="gold-line"></div>
       <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはXでお届けしています。</p>
-      <div class="twitter-embed">
+      <div class="twitter-embed" id="twitter-container">
+        <iframe
+          src="https://syndication.twitter.com/srv/timeline-profile/screen-name/karafuto_"
+          loading="lazy"
+          title="樺太食堂 Xタイムライン">
+        </iframe>
         <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="sns-fallback-card">
           <div class="sns-fallback-icon">
             <svg width="28" height="28" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -1041,6 +1058,32 @@
     }, { threshold: 0.15 });
 
     reveals.forEach(el => observer.observe(el));
+
+    // ── Xタイムラインiframe読み込みフォールバック ──
+    (function() {
+      var iframe = document.querySelector('#twitter-container iframe');
+      var fallback = document.querySelector('#twitter-container .sns-fallback-card');
+      if (iframe && fallback) {
+        // iframeの読み込みエラー時にフォールバックカードを表示
+        iframe.addEventListener('error', function() {
+          iframe.style.display = 'none';
+          fallback.style.display = 'flex';
+        });
+        // 8秒経ってもiframe内にコンテンツがなければフォールバック
+        setTimeout(function() {
+          try {
+            // クロスオリジンのためcontentDocumentにアクセスできない場合、
+            // iframeの高さが極端に小さい＝読み込み失敗と判断
+            if (iframe.offsetHeight < 50) {
+              iframe.style.display = 'none';
+              fallback.style.display = 'flex';
+            }
+          } catch(e) {
+            // クロスオリジンエラーは正常（コンテンツが読み込まれている証拠）
+          }
+        }, 8000);
+      }
+    })();
 
     // ── Show thank you banner when redirected after form submission ──
     (function() {
