@@ -440,55 +440,17 @@
       max-width: 550px;
       margin: 0 auto;
       overflow: hidden;
-    }
-
-    .twitter-embed iframe {
-      display: block;
-      width: 100%;
-      height: 500px;
-      border: none;
-    }
-
-    .twitter-embed .sns-fallback-card {
-      display: none;
-    }
-
-    .sns-fallback-card {
+      min-height: 500px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 0.8rem;
-      padding: 3rem 2rem;
-      text-decoration: none;
-      color: var(--color-deep);
-      transition: opacity 0.3s;
+      justify-content: center;
     }
 
-    .sns-fallback-card:hover {
-      opacity: 0.7;
+    .twitter-timeline {
+      width: 100% !important;
+      max-width: 100%;
     }
 
-    .sns-fallback-icon svg {
-      fill: var(--color-deep);
-    }
-
-    .sns-fallback-name {
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-    }
-
-    .sns-fallback-handle {
-      font-size: 0.85rem;
-      color: var(--color-gold);
-    }
-
-    .sns-fallback-cta {
-      margin-top: 0.5rem;
-      font-size: 0.8rem;
-      color: var(--color-gold);
-      letter-spacing: 0.1em;
-    }
 
     /* ── Access ── */
     .access {
@@ -894,19 +856,14 @@
       <div class="gold-line"></div>
       <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはXでお届けしています。</p>
       <div class="twitter-embed" id="twitter-container">
-        <iframe
-          src="https://syndication.twitter.com/srv/timeline-profile/screen-name/karafuto_"
-          sandbox="allow-scripts allow-same-origin allow-popups"
-          loading="lazy"
-          title="樺太食堂 Xタイムライン">
-        </iframe>
-        <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="sns-fallback-card">
-          <div class="sns-fallback-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </div>
-          <span class="sns-fallback-name">樺太食堂</span>
-          <span class="sns-fallback-handle">@karafuto_</span>
-          <span class="sns-fallback-cta">Xで最新情報をチェック →</span>
+        <a href="https://x.com/karafuto_?ref_src=twsrc%5Etfw"
+           class="twitter-timeline"
+           data-lang="ja"
+           data-height="500"
+           data-theme="light"
+           data-chrome="noheader nofooter noborders"
+           data-dnt="true">
+          樺太食堂からのお知らせ
         </a>
       </div>
     </div>
@@ -1062,30 +1019,25 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // ── Xタイムラインiframe読み込みフォールバック ──
+    // ── Xタイムライン読み込み ──
+    // X公式ウィジェットスクリプトを動的読み込み
     (function() {
-      var iframe = document.querySelector('#twitter-container iframe');
-      var fallback = document.querySelector('#twitter-container .sns-fallback-card');
-      if (iframe && fallback) {
-        // iframeの読み込みエラー時にフォールバックカードを表示
-        iframe.addEventListener('error', function() {
-          iframe.style.display = 'none';
-          fallback.style.display = 'flex';
-        });
-        // 8秒経ってもiframe内にコンテンツがなければフォールバック
-        setTimeout(function() {
-          try {
-            // クロスオリジンのためcontentDocumentにアクセスできない場合、
-            // iframeの高さが極端に小さい＝読み込み失敗と判断
-            if (iframe.offsetHeight < 50) {
-              iframe.style.display = 'none';
-              fallback.style.display = 'flex';
-            }
-          } catch(e) {
-            // クロスオリジンエラーは正常（コンテンツが読み込まれている証拠）
-          }
-        }, 8000);
-      }
+      window.twttr = (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0],
+          t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
+
+        t._e = [];
+        t.ready = function(f) {
+          t._e.push(f);
+        };
+
+        return t;
+      }(document, "script", "twitter-wjs"));
     })();
 
     // ── Show thank you banner when redirected after form submission ──
