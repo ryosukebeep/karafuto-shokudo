@@ -590,122 +590,60 @@
       margin-bottom: 3rem;
     }
 
-    .tweets-container {
-      max-width: 700px;
+    .twitter-embed {
+      background: rgba(250, 246, 240, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      max-width: 600px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .tweet-card {
-      background: rgba(250, 246, 240, 0.9);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 2rem;
-      border: 1px solid rgba(196, 106, 44, 0.2);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .tweet-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(196, 106, 44, 0.3);
-      border-color: var(--color-gold);
-    }
-
-    .tweet-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(196, 106, 44, 0.1);
-    }
-
-    .tweet-author {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-
-    .tweet-author strong {
-      font-size: 1rem;
-      color: var(--color-deep);
-      font-weight: 700;
-    }
-
-    .tweet-author span {
-      font-size: 0.85rem;
-      color: var(--color-gold);
-      font-weight: 400;
-    }
-
-    .tweet-date {
-      font-size: 0.75rem;
-      color: #999;
-      letter-spacing: 0.05em;
-    }
-
-    .tweet-content {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: #3a3a3a;
-      letter-spacing: 0.05em;
-    }
-
-    .x-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.8rem;
-      margin-top: 2rem;
-      padding: 1rem 2.5rem;
-      background: rgba(250, 246, 240, 0.9);
-      backdrop-filter: blur(10px);
-      color: var(--color-deep);
-      text-decoration: none;
-      font-family: var(--font-serif);
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      border-radius: 50px;
-      border: 2px solid var(--color-gold);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 5px 20px rgba(196, 106, 44, 0.2);
-      position: relative;
       overflow: hidden;
+      min-height: 500px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(196, 106, 44, 0.2);
     }
 
-    .x-button::before {
-      content: '';
+    .loading-spinner {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      background: rgba(250, 246, 240, 0.95);
+      z-index: 10;
+      transition: opacity 0.3s ease-out;
+    }
+
+    .loading-spinner.hidden {
       opacity: 0;
-      transition: opacity 0.3s;
+      pointer-events: none;
     }
 
-    .x-button:hover::before {
-      opacity: 1;
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(196, 106, 44, 0.2);
+      border-top-color: var(--color-gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
     }
 
-    .x-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(196, 106, 44, 0.4);
-      color: var(--color-white);
+    .loading-spinner p {
+      color: var(--color-gold);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
     }
 
-    .x-button svg,
-    .x-button span {
-      position: relative;
-      z-index: 1;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    .x-button svg {
-      transition: transform 0.3s;
-    }
-
-    .x-button:hover svg {
-      transform: scale(1.1);
+    .twitter-timeline {
+      width: 100% !important;
+      max-width: 100%;
     }
 
     /* ── Access Section ── */
@@ -1260,59 +1198,20 @@
       <div class="gold-line"></div>
       <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはXでお届けしています。</p>
 
-      <div class="tweets-container">
-        <!-- ツイート1 -->
-        <div class="tweet-card reveal">
-          <div class="tweet-header">
-            <div class="tweet-author">
-              <strong>樺太食堂</strong>
-              <span>@karafuto_</span>
-            </div>
-            <div class="tweet-date">2024年12月15日</div>
-          </div>
-          <div class="tweet-content">
-            本日も営業しております🦀<br>
-            新鮮な生うに丼、ご用意してお待ちしています！<br>
-            #樺太食堂 #稚内グルメ #海鮮丼
-          </div>
+      <div class="twitter-embed" id="twitter-container">
+        <div class="loading-spinner" id="twitter-loading">
+          <div class="spinner"></div>
+          <p>タイムラインを読み込んでいます...</p>
         </div>
-
-        <!-- ツイート2 -->
-        <div class="tweet-card reveal">
-          <div class="tweet-header">
-            <div class="tweet-author">
-              <strong>樺太食堂</strong>
-              <span>@karafuto_</span>
-            </div>
-            <div class="tweet-date">2024年12月10日</div>
-          </div>
-          <div class="tweet-content">
-            【冬季休業のお知らせ】<br>
-            誠に勝手ながら、10月上旬より冬季休業とさせていただきます。<br>
-            来春の営業再開をお楽しみに！
-          </div>
-        </div>
-
-        <!-- ツイート3 -->
-        <div class="tweet-card reveal">
-          <div class="tweet-header">
-            <div class="tweet-author">
-              <strong>樺太食堂</strong>
-              <span>@karafuto_</span>
-            </div>
-            <div class="tweet-date">2024年12月5日</div>
-          </div>
-          <div class="tweet-content">
-            創業50周年を迎えることができました🎉<br>
-            これまでご愛顧いただいた皆様に心より感謝申し上げます。
-          </div>
-        </div>
+        <a class="twitter-timeline"
+           data-lang="ja"
+           data-height="500"
+           data-theme="light"
+           href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">
+          Tweets by karafuto_
+        </a>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
       </div>
-
-      <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="x-button">
-        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/></svg>
-        <span>Xで最新情報をチェック</span>
-      </a>
     </div>
   </section>
 
@@ -1476,7 +1375,29 @@
 
     reveals.forEach(el => observer.observe(el));
 
-// __ Show thank you banner ──
+    // ── Hide loading spinner when Twitter widget loads ──
+    window.addEventListener('load', function() {
+      if (window.twttr && window.twttr.widgets) {
+        window.twttr.widgets.load().then(function() {
+          const spinner = document.getElementById('twitter-loading');
+          if (spinner) {
+            spinner.classList.add('hidden');
+            setTimeout(() => spinner.remove(), 300);
+          }
+        });
+      } else {
+        // Fallback: hide spinner after 3 seconds
+        setTimeout(function() {
+          const spinner = document.getElementById('twitter-loading');
+          if (spinner) {
+            spinner.classList.add('hidden');
+            setTimeout(() => spinner.remove(), 300);
+          }
+        }, 3000);
+      }
+    });
+
+    // __ Show thank you banner ──
     (function() {
       try {
         var params = new URLSearchParams(window.location.search || "");
