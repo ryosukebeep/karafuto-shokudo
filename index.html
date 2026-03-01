@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKCC5715LR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KKCC5715LR');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>樺太食堂 | 北海道の海鮮丼 - 創業50周年</title>
+  <meta name="description" content="北海道・樺太食堂。創業50周年を迎えた海鮮丼の名店。新鮮な北の幸をお届けします。">
+  <link rel="icon" type="image/jpeg" href="logo/niko.jpg">
+  <link rel="apple-touch-icon" href="logo/niko.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-deep: #1c1008;
+      --color-navy: #3d2813;
+      --color-gold: #c46a2c;
+      --color-gold-light: #e0956a;
+      --color-white: #f5f0e8;
+      --color-cream: #faf6f0;
+      --font-serif: 'Shippori Mincho', 'Noto Serif JP', serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-cream);
+      color: var(--color-deep);
+      overflow-x: hidden;
+    }
+
+    /* ── Header ── */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.5s, padding 0.5s;
+    }
+
+    header.scrolled {
+      background: rgba(10, 22, 40, 0.95);
+      padding: 0.8rem 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--color-white);
+      letter-spacing: 0.3em;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--color-white);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      position: relative;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+      transition: color 0.3s;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--color-gold);
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a:hover {
+      color: var(--color-gold-light);
+    }
+
+    /* ── Hero Slider ── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out, transform 8s ease-out;
+      transform: scale(1.08);
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .slide-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10, 22, 40, 0.3) 0%,
+        rgba(10, 22, 40, 0.1) 40%,
+        rgba(10, 22, 40, 0.5) 100%
+      );
+    }
+
+    .hero-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      z-index: 10;
+      color: var(--color-white);
+    }
+
+    .hero-catch {
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: var(--color-white);
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.5s forwards;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+      opacity: 0;
+      animation: fadeUp 1s 0.8s forwards;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-white);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      opacity: 0;
+      animation: fadeUp 1s 1.5s forwards;
+    }
+
+    .hero-scroll .line {
+      width: 1px;
+      height: 40px;
+      background: var(--color-gold);
+      animation: scrollLine 2s infinite;
+    }
+
+    @keyframes scrollLine {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slider indicators */
+    .slider-indicators {
+      position: absolute;
+      bottom: 6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .slider-indicators button {
+      width: 30px;
+      height: 2px;
+      background: rgba(255,255,255,0.4);
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s, width 0.3s;
+    }
+
+    .slider-indicators button.active {
+      background: var(--color-gold);
+      width: 50px;
+    }
+
+    /* ── Sections Common ── */
+    section {
+      padding: 6rem 2rem;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      color: var(--color-gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      margin-bottom: 2rem;
+      color: var(--color-deep);
+    }
+
+    .section-title .accent {
+      color: var(--color-gold);
+    }
+
+    .gold-line {
+      width: 50px;
+      height: 1px;
+      background: var(--color-gold);
+      margin-bottom: 2rem;
+    }
+
+    /* ── About ── */
+    .about {
+      background: var(--color-cream);
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 8rem 2rem;
+    }
+
+    .about .gold-line {
+      margin: 0 auto 2rem;
+    }
+
+    .about-text {
+      font-size: 1rem;
+      line-height: 2.4;
+      color: #3a3a3a;
+      letter-spacing: 0.08em;
+    }
+
+    .anniversary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    .anniversary-line {
+      flex: 1;
+      max-width: 80px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--color-gold));
+    }
+
+    .anniversary-line:last-child {
+      background: linear-gradient(to left, transparent, var(--color-gold));
+    }
+
+    .anniversary-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .anniversary-number {
+      font-size: 4.5rem;
+      font-weight: 900;
+      color: var(--color-gold);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .anniversary-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      color: var(--color-gold);
+      margin-top: 0.3rem;
+    }
+
+    .anniversary-year-start,
+    .anniversary-year-end {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      color: #999;
+    }
+
+    /* ── Gallery ── */
+    .gallery {
+      background: var(--color-deep);
+      padding: 8rem 2rem;
+    }
+
+    .gallery-header {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 3rem;
+    }
+
+    .gallery .section-title {
+      color: var(--color-white);
+    }
+
+    .gallery .gold-line {
+      margin: 0 auto 2rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
+      gap: 0.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .gallery-item-large {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    .gallery-item {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+      }
+
+      .gallery-item-large {
+        grid-column: span 2;
+        grid-row: span 1;
+      }
+    }
+
+    /* ── SNS ── */
+    .sns {
+      background: var(--color-deep);
+      color: var(--color-white);
+      padding: 8rem 2rem;
+    }
+
+    .sns-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .sns .section-title {
+      color: var(--color-white);
+    }
+
+    .sns .gold-line {
+      margin: 0 auto 2rem;
+    }
+
+    .sns-text {
+      font-size: 0.95rem;
+      line-height: 2;
+      color: rgba(245, 242, 235, 0.7);
+      letter-spacing: 0.08em;
+      margin-bottom: 2.5rem;
+    }
+
+    .twitter-embed {
+      background: var(--color-cream);
+      border-radius: 12px;
+      max-width: 550px;
+      margin: 0 auto;
+      overflow: hidden;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .twitter-timeline {
+      width: 100% !important;
+      max-width: 100%;
+    }
+
+
+    /* ── Access ── */
+    .access {
+      background: var(--color-cream);
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 8rem 2rem;
+    }
+
+    .access .gold-line {
+      margin: 0 auto 2rem;
+    }
+
+    .access-info {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      line-height: 2;
+      color: #3a3a3a;
+    }
+
+    .access-info dt {
+      color: var(--color-gold);
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+    }
+
+    .access-info dd {
+      margin-bottom: 1rem;
+      letter-spacing: 0.08em;
+    }
+
+    .map-embed {
+      margin-top: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .map-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 2.5rem;
+      padding: 1rem 2.5rem;
+      background: var(--color-deep);
+      color: var(--color-white);
+      text-decoration: none;
+      font-family: var(--font-serif);
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .map-button:hover {
+      background: var(--color-navy);
+      transform: translateY(-2px);
+    }
+
+    /* ── Contact ── */
+    .contact {
+      background: var(--color-cream);
+      padding: 8rem 2rem;
+    }
+
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact .gold-line {
+      margin: 0 auto 2.5rem;
+    }
+
+    .thankyou-banner {
+      display: none;
+      margin-bottom: 2rem;
+      padding: 1.2rem 1rem;
+      background: #fff7e9;
+      border: 1px solid #f3cf8c;
+      color: #5a3a10;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+    }
+
+    .thankyou-banner.visible {
+      display: block;
+    }
+
+    .contact-form {
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: var(--color-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group .optional {
+      font-size: 0.7rem;
+      color: #999;
+      margin-left: 0.3rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      border: 1px solid #ddd;
+      background: #fff;
+      color: var(--color-deep);
+      transition: border-color 0.3s;
+      letter-spacing: 0.05em;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--color-gold);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+    }
+
+    .form-submit {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      background: var(--color-deep);
+      color: var(--color-white);
+      border: none;
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .form-submit:hover {
+      background: var(--color-navy);
+      transform: translateY(-2px);
+    }
+
+    .map-button svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--color-gold);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--color-deep);
+      color: var(--color-white);
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: 0.3em;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-tagline {
+      font-size: 0.75rem;
+      color: var(--color-gold);
+      letter-spacing: 0.4em;
+      margin-bottom: 2rem;
+    }
+
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(197, 162, 85, 0.3);
+      color: var(--color-white);
+      text-decoration: none;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .footer-social a:hover {
+      border-color: var(--color-gold);
+      background: rgba(197, 162, 85, 0.1);
+    }
+
+    .footer-social a svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--color-white);
+    }
+
+    .footer-bottom {
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Scroll Animations ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s, transform 0.8s;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+      }
+
+      nav {
+        gap: 1rem;
+      }
+
+      nav a {
+        font-size: 0.75rem;
+      }
+
+      .header-logo {
+        font-size: 1rem;
+      }
+
+      section {
+        padding: 4rem 1.5rem;
+      }
+
+      .about, .access {
+        padding: 5rem 1.5rem;
+      }
+
+      .philosophy-features {
+        grid-template-columns: 1fr;
+      }
+
+      .anniversary {
+        gap: 1rem;
+      }
+
+      .anniversary-number {
+        font-size: 3.5rem;
+      }
+
+      .anniversary-line {
+        max-width: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header id="header">
+    <div class="header-logo">樺太食堂</div>
+    <nav>
+      <a href="#about">当店について</a>
+      <a href="#gallery">ギャラリー</a>
+      <a href="#sns">最新情報</a>
+      <a href="#access">アクセス</a>
+      <a href="#contact">お問い合わせ</a>
+    </nav>
+  </header>
+
+  <!-- Hero Slider -->
+  <section class="hero" id="top">
+    <div class="slider" id="slider">
+      <div class="slide active">
+        <img src="images/GYNGeQLakAMuPA7.jpeg" alt="樺太食堂 外観">
+        <div class="slide-overlay"></div>
+      </div>
+      <div class="slide">
+        <img src="images/IMG_2449.JPG" alt="うにいくら丼">
+        <div class="slide-overlay"></div>
+      </div>
+      <div class="slide">
+        <img src="images/FpoilsfaIAAhc6d.jpeg" alt="北海道の港 流氷">
+        <div class="slide-overlay"></div>
+      </div>
+      <div class="slide">
+        <img src="images/GXMLRFraEAAdRz7.jpeg" alt="利尻富士と夕焼けの海">
+        <div class="slide-overlay"></div>
+      </div>
+      <div class="slide">
+        <img src="images/S__8282147.jpg" alt="樺太食堂 外観">
+        <div class="slide-overlay"></div>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <p class="hero-catch">無敵の生うに丼</p>
+      <h1 class="hero-title">樺太食堂</h1>
+    </div>
+
+    <div class="slider-indicators" id="indicators">
+      <button class="active" data-index="0"></button>
+      <button data-index="1"></button>
+      <button data-index="2"></button>
+      <button data-index="3"></button>
+      <button data-index="4"></button>
+    </div>
+
+    <div class="hero-scroll">
+      <span>scroll</span>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <div class="reveal">
+      <p class="section-label">当店について</p>
+      <h2 class="section-title">半世紀の<span class="accent">味</span>を、一杯に</h2>
+      <div class="gold-line"></div>
+      <p class="about-text">
+        昭和51年、稚内ノシャップ岬のそばに<br>
+        小さな食堂として店を開きました。<br><br>
+        名物「無敵の生うに丼」は<br>
+        利尻・礼文の海で獲れたエゾバフンウニを<br>
+        丼いっぱいに敷き詰めた当店自慢の一品です。<br><br>
+        おかげさまで今年で創業50年。<br>
+        これからも北海道の海の幸を<br>
+        まっすぐにお届けしてまいります。<br>
+        稚内にお越しの際は、ぜひお立ち寄りください。
+      </p>
+      <div class="anniversary">
+        <div class="anniversary-line"></div>
+        <span class="anniversary-year-start">1976</span>
+        <div class="anniversary-center">
+          <span class="anniversary-number">50</span>
+          <span class="anniversary-label">th Anniversary</span>
+        </div>
+        <span class="anniversary-year-end">2026</span>
+        <div class="anniversary-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" id="gallery">
+    <div class="reveal">
+      <div class="gallery-header">
+        <p class="section-label">ギャラリー</p>
+        <h2 class="section-title">樺太食堂の<span class="accent">風景</span></h2>
+        <div class="gold-line"></div>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item gallery-item-large">
+          <img src="images/IMG_2449.JPG" alt="うにいくら丼" loading="lazy">
+        </div>
+        <div class="gallery-item">
+          <img src="images/GYNGeQLakAMuPA7.jpeg" alt="樺太食堂 外観" loading="lazy">
+        </div>
+        <div class="gallery-item">
+          <img src="images/GXMLRFraEAAdRz7.jpeg" alt="ノシャップ岬の夕焼け" loading="lazy">
+        </div>
+        <div class="gallery-item">
+          <img src="images/FpoilsfaIAAhc6d.jpeg" alt="流氷の港" loading="lazy">
+        </div>
+        <div class="gallery-item">
+          <img src="images/S__8282147.jpg" alt="樺太食堂 外観" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SNS -->
+  <section class="sns" id="sns">
+    <div class="sns-inner reveal">
+      <p class="section-label">お知らせ</p>
+      <h2 class="section-title">最新<span class="accent">情報</span></h2>
+      <div class="gold-line"></div>
+      <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはXでお届けしています。</p>
+      <div class="twitter-embed" id="twitter-container">
+        <a href="https://x.com/karafuto_?ref_src=twsrc%5Etfw"
+           class="twitter-timeline"
+           data-lang="ja"
+           data-height="500"
+           data-theme="light"
+           data-chrome="noheader nofooter noborders"
+           data-dnt="true">
+          樺太食堂からのお知らせ
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Access -->
+  <section class="access" id="access">
+    <div class="reveal">
+      <p class="section-label">アクセス</p>
+      <h2 class="section-title">お店の<span class="accent">ご案内</span></h2>
+      <div class="gold-line"></div>
+      <dl class="access-info">
+        <dt>所在地</dt>
+        <dd>〒097-0026 北海道稚内市ノシャップ2丁目2-6</dd>
+        <dt>電話番号</dt>
+        <dd>0162-24-3451</dd>
+        <dt>営業時間</dt>
+        <dd>9:00〜14:30（L.O. 14:00）<br><small>※季節により変動あり。詳しくはSNSをご確認ください</small></dd>
+        <dt>定休日</dt>
+        <dd>不定休・冬季休業あり（10月上旬〜4月下旬）</dd>
+        <dt>交通</dt>
+        <dd>JR稚内駅より宗谷バス ノシャップ行き約10分<br>「ノシャップ」下車すぐ</dd>
+      </dl>
+      <div class="map-embed">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2843.5!2d141.6439039!3d45.4481739!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5f103d17a6c8deed%3A0x6f445058495481d3!2z5qi95aSq6aOf5aCC!5e0!3m2!1sja!2sjp!4v1700000000000!5m2!1sja!2sjp"
+          width="100%"
+          height="350"
+          style="border:0; border-radius: 4px;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+      <a href="https://www.google.co.jp/maps/place/%E6%A8%BA%E5%A4%AA%E9%A3%9F%E5%A0%82/@45.4481739,141.6439039,17z/data=!3m1!4b1!4m5!3m4!1s0x5f103d17a6c8deed:0x6f445058495481d3!8m2!3d45.4481702!4d141.6460979" target="_blank" rel="noopener noreferrer" class="map-button">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        Google Map で大きく見る
+      </a>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="contact-inner reveal">
+      <p class="section-label">お問い合わせ</p>
+      <h2 class="section-title"><span class="accent">ご質問</span>・ご予約など</h2>
+      <div class="gold-line"></div>
+      <div id="thankyou-banner" class="thankyou-banner">
+        お問い合わせありがとうございます。<br>
+        内容を確認のうえ、数日以内に折り返しご連絡させていただきます。
+      </div>
+      <form action="https://formsubmit.co/25626c19aad6fff2bf638255290236c3" method="POST" class="contact-form">
+        <!-- Formsubmit settings -->
+        <input type="hidden" name="_cc" value="karafuto.info@unidon.jp">
+        <input type="hidden" name="_subject" value="【樺太食堂HP】お問い合わせがありました">
+        <input type="hidden" name="_captcha" value="true">
+        <input type="hidden" name="_template" value="table">
+        <input type="text" name="_honey" style="display:none">
+        <input type="hidden" name="_next" value="https://unidon.jp/?sent=1">
+
+        <div class="form-group">
+          <label for="name">お名前</label>
+          <input type="text" id="name" name="お名前" required>
+        </div>
+        <div class="form-group">
+          <label for="email">メールアドレス</label>
+          <input type="email" id="email" name="メールアドレス" required>
+        </div>
+        <div class="form-group">
+          <label for="tel">お電話番号<span class="optional">（任意）</span></label>
+          <input type="tel" id="tel" name="電話番号">
+        </div>
+        <div class="form-group">
+          <label for="message">お問い合わせ内容</label>
+          <textarea id="message" name="お問い合わせ内容" rows="6" required></textarea>
+        </div>
+        <button type="submit" class="form-submit">送信する</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">樺太食堂</div>
+    <p class="footer-tagline">— 北海道稚内市 ノシャップ岬 —</p>
+    <div class="footer-social">
+      <!-- X (Twitter) -->
+      <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <!-- Google Maps -->
+      <a href="https://www.google.co.jp/maps/place/%E6%A8%BA%E5%A4%AA%E9%A3%9F%E5%A0%82/@45.4481739,141.6439039,17z/data=!3m1!4b1!4m5!3m4!1s0x5f103d17a6c8deed:0x6f445058495481d3!8m2!3d45.4481702!4d141.6460979" target="_blank" rel="noopener noreferrer" aria-label="Google Maps">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      </a>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 樺太食堂 All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ── Slider ──
+    const slides = document.querySelectorAll('.slide');
+    const indicators = document.querySelectorAll('#indicators button');
+    let current = 0;
+    let interval;
+
+    function goToSlide(index) {
+      slides[current].classList.remove('active');
+      indicators[current].classList.remove('active');
+      current = index;
+      slides[current].classList.add('active');
+      indicators[current].classList.add('active');
+    }
+
+    function nextSlide() {
+      goToSlide((current + 1) % slides.length);
+    }
+
+    function startAutoplay() {
+      interval = setInterval(nextSlide, 5000);
+    }
+
+    indicators.forEach(btn => {
+      btn.addEventListener('click', () => {
+        clearInterval(interval);
+        goToSlide(parseInt(btn.dataset.index));
+        startAutoplay();
+      });
+    });
+
+    startAutoplay();
+
+    // ── Header scroll effect ──
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 80) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // ── Scroll reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Xタイムライン読み込み ──
+    // X公式ウィジェットスクリプトを動的読み込み
+    (function() {
+      window.twttr = (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0],
+          t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
+
+        t._e = [];
+        t.ready = function(f) {
+          t._e.push(f);
+        };
+
+        return t;
+      }(document, "script", "twitter-wjs"));
+    })();
+
+    // ── Show thank you banner when redirected after form submission ──
+    (function() {
+      try {
+        var params = new URLSearchParams(window.location.search || "");
+        if (params.get('sent') === '1') {
+          var banner = document.getElementById('thankyou-banner');
+          if (banner) {
+            banner.classList.add('visible');
+          }
+          var contactSection = document.getElementById('contact');
+          if (contactSection) {
+            contactSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      } catch (e) {
+        // fail silently
+      }
+    })();
+  </script>
+
+</body>
+</html>
