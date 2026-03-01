@@ -598,52 +598,21 @@
       margin: 0 auto;
       overflow: hidden;
       min-height: 500px;
-      position: relative;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(196, 106, 44, 0.2);
-    }
-
-    .loading-spinner {
-      position: absolute;
-      inset: 0;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1.5rem;
-      background: rgba(250, 246, 240, 0.95);
-      z-index: 10;
-      transition: opacity 0.3s ease-out;
-    }
-
-    .loading-spinner.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid rgba(196, 106, 44, 0.2);
-      border-top-color: var(--color-gold);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    .loading-spinner p {
-      color: var(--color-gold);
-      font-size: 0.95rem;
-      letter-spacing: 0.1em;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(196, 106, 44, 0.2);
     }
 
     .twitter-timeline {
       width: 100% !important;
       max-width: 100%;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     /* ── Access Section ── */
@@ -1197,20 +1166,11 @@
       <h2 class="section-title">最新<span class="accent">情報</span></h2>
       <div class="gold-line"></div>
       <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはXでお届けしています。</p>
-
       <div class="twitter-embed" id="twitter-container">
-        <div class="loading-spinner" id="twitter-loading">
-          <div class="spinner"></div>
-          <p>タイムラインを読み込んでいます...</p>
+        <div id="twitter-placeholder" style="padding: 3rem; text-align: center; color: var(--color-gold);">
+          <p style="font-size: 1rem; margin-bottom: 1rem;">タイムラインを読み込んでいます...</p>
+          <div style="width: 40px; height: 40px; border: 3px solid rgba(196, 106, 44, 0.3); border-top-color: var(--color-gold); border-radius: 50%; margin: 0 auto; animation: spin 1s linear infinite;"></div>
         </div>
-        <a class="twitter-timeline"
-           data-lang="ja"
-           data-height="500"
-           data-theme="light"
-           href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">
-          Tweets by karafuto_
-        </a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
       </div>
     </div>
   </section>
@@ -1375,27 +1335,57 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // ── Hide loading spinner when Twitter widget loads ──
-    window.addEventListener('load', function() {
-      if (window.twttr && window.twttr.widgets) {
-        window.twttr.widgets.load().then(function() {
-          const spinner = document.getElementById('twitter-loading');
-          if (spinner) {
-            spinner.classList.add('hidden');
-            setTimeout(() => spinner.remove(), 300);
-          }
-        });
-      } else {
-        // Fallback: hide spinner after 3 seconds
-        setTimeout(function() {
-          const spinner = document.getElementById('twitter-loading');
-          if (spinner) {
-            spinner.classList.add('hidden');
-            setTimeout(() => spinner.remove(), 300);
-          }
-        }, 3000);
+    // ── Xタイムライン即座読み込み（デバッグ用） ──
+    (function() {
+      const container = document.getElementById('twitter-container');
+      const placeholder = document.getElementById('twitter-placeholder');
+
+      // プレースホルダーを削除
+      if (placeholder) {
+        setTimeout(() => {
+          placeholder.remove();
+        }, 100);
       }
-    });
+
+      // タイムラインリンクを作成
+      const timeline = document.createElement('a');
+      timeline.className = 'twitter-timeline';
+      timeline.href = 'https://x.com/karafuto_?ref_src=twsrc%5Etfw';
+      timeline.setAttribute('data-lang', 'ja');
+      timeline.setAttribute('data-height', '500');
+      timeline.setAttribute('data-theme', 'light');
+      timeline.setAttribute('data-chrome', 'noheader nofooter noborders');
+      timeline.setAttribute('data-dnt', 'true');
+      timeline.textContent = '樺太食堂からのお知らせ';
+
+      container.appendChild(timeline);
+
+      // ウィジェットスクリプトを読み込み
+      window.twttr = (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0],
+          t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        js.async = true;
+        js.charset = 'utf-8';
+        if (fjs && fjs.parentNode) {
+          fjs.parentNode.insertBefore(js, fjs);
+        } else {
+          document.head.appendChild(js);
+        }
+
+        t._e = [];
+        t.ready = function(f) {
+          t._e.push(f);
+        };
+
+        return t;
+      }(document, "script", "twitter-wjs"));
+
+      console.log('Twitter widget loading started');
+    })();
 
     // __ Show thank you banner ──
     (function() {
