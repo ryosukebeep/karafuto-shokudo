@@ -1167,10 +1167,8 @@
       <div class="gold-line"></div>
       <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはXでお届けしています。</p>
       <div class="twitter-embed" id="twitter-container">
-        <div id="twitter-placeholder" style="padding: 3rem; text-align: center; color: var(--color-gold);">
-          <p style="font-size: 1rem; margin-bottom: 1rem;">タイムラインを読み込んでいます...</p>
-          <div style="width: 40px; height: 40px; border: 3px solid rgba(196, 106, 44, 0.3); border-top-color: var(--color-gold); border-radius: 50%; margin: 0 auto; animation: spin 1s linear infinite;"></div>
-        </div>
+        <a class="twitter-timeline" href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">Tweets by karafuto_</a>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
       </div>
     </div>
   </section>
@@ -1335,59 +1333,7 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // ── Xタイムライン即座読み込み（デバッグ用） ──
-    (function() {
-      const container = document.getElementById('twitter-container');
-      const placeholder = document.getElementById('twitter-placeholder');
-
-      // プレースホルダーを削除
-      if (placeholder) {
-        setTimeout(() => {
-          placeholder.remove();
-        }, 100);
-      }
-
-      // タイムラインリンクを作成
-      const timeline = document.createElement('a');
-      timeline.className = 'twitter-timeline';
-      timeline.href = 'https://x.com/karafuto_?ref_src=twsrc%5Etfw';
-      timeline.setAttribute('data-lang', 'ja');
-      timeline.setAttribute('data-height', '500');
-      timeline.setAttribute('data-theme', 'light');
-      timeline.setAttribute('data-chrome', 'noheader nofooter noborders');
-      timeline.setAttribute('data-dnt', 'true');
-      timeline.textContent = '樺太食堂からのお知らせ';
-
-      container.appendChild(timeline);
-
-      // ウィジェットスクリプトを読み込み
-      window.twttr = (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0],
-          t = window.twttr || {};
-        if (d.getElementById(id)) return t;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://platform.twitter.com/widgets.js";
-        js.async = true;
-        js.charset = 'utf-8';
-        if (fjs && fjs.parentNode) {
-          fjs.parentNode.insertBefore(js, fjs);
-        } else {
-          document.head.appendChild(js);
-        }
-
-        t._e = [];
-        t.ready = function(f) {
-          t._e.push(f);
-        };
-
-        return t;
-      }(document, "script", "twitter-wjs"));
-
-      console.log('Twitter widget loading started');
-    })();
-
-    // __ Show thank you banner ──
+// __ Show thank you banner ──
     (function() {
       try {
         var params = new URLSearchParams(window.location.search || "");
