@@ -178,6 +178,68 @@
         linear-gradient(to bottom, rgba(10, 22, 40, 0.4) 0%, rgba(10, 22, 40, 0.1) 40%, rgba(10, 22, 40, 0.6) 100%);
     }
 
+    /* Floating SVG Elements */
+    .floating-svg-container {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .floating-element {
+      position: absolute;
+      opacity: 0.25;
+      animation: float 6s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(196, 106, 44, 0.3));
+    }
+
+    .floating-element:nth-child(1) {
+      top: 15%;
+      left: 10%;
+      animation-delay: 0s;
+      animation-duration: 7s;
+    }
+
+    .floating-element:nth-child(2) {
+      top: 65%;
+      right: 15%;
+      animation-delay: 2s;
+      animation-duration: 8s;
+    }
+
+    .floating-element:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      animation-delay: 4s;
+      animation-duration: 9s;
+    }
+
+    .floating-element:nth-child(4) {
+      top: 40%;
+      right: 25%;
+      animation-delay: 1s;
+      animation-duration: 10s;
+    }
+
+    .floating-element:nth-child(5) {
+      bottom: 30%;
+      right: 10%;
+      animation-delay: 3s;
+      animation-duration: 11s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+      }
+      33% {
+        transform: translateY(-30px) rotate(5deg) scale(1.05);
+      }
+      66% {
+        transform: translateY(-15px) rotate(-3deg) scale(0.98);
+      }
+    }
+
 
     /* Animated Wave */
     .wave-svg {
@@ -1091,6 +1153,27 @@
       </div>
     </div>
 
+
+    <!-- Floating SVG Elements -->
+    <div class="floating-svg-container">
+      <svg class="floating-element" width="60" height="60" viewBox="0 0 60 60">
+        <circle cx="30" cy="30" r="25" fill="none" stroke="var(--color-gold)" stroke-width="2"/>
+      </svg>
+      <svg class="floating-element" width="80" height="80" viewBox="0 0 80 80">
+        <rect x="10" y="10" width="60" height="60" fill="none" stroke="var(--color-gold)" stroke-width="2" transform="rotate(45 40 40)"/>
+      </svg>
+      <svg class="floating-element" width="50" height="50" viewBox="0 0 50 50">
+        <polygon points="25,5 45,45 5,45" fill="none" stroke="var(--color-gold)" stroke-width="2"/>
+      </svg>
+      <svg class="floating-element" width="70" height="70" viewBox="0 0 70 70">
+        <circle cx="35" cy="35" r="20" fill="none" stroke="var(--color-gold)" stroke-width="2"/>
+        <circle cx="35" cy="35" r="10" fill="none" stroke="var(--color-gold)" stroke-width="1"/>
+      </svg>
+      <svg class="floating-element" width="55" height="55" viewBox="0 0 55 55">
+        <path d="M27.5,5 L45,50 L10,50 Z" fill="none" stroke="var(--color-gold)" stroke-width="2"/>
+      </svg>
+    </div>
+
     <!-- Animated Wave SVG -->
     <svg class="wave-svg" viewBox="0 0 1200 300" preserveAspectRatio="none">
       <path class="wave-path" d="M0,150 Q300,50 600,150 T1200,150">
@@ -1215,7 +1298,7 @@
   <section class="contact" id="contact">
     <div class="contact-inner reveal">
       <p class="section-label">お問い合わせ</p>
-      <h2 class="section-title"><span class="accent">ご質問</span>・ご予約など</h2>
+      <h2 class="section-title"><span class="accent">ご質問</span>など</h2>
       <div class="gold-line"></div>
       <div id="thankyou-banner" class="thankyou-banner">
         お問い合わせありがとうございます。<br>
