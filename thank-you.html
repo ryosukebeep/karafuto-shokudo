@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせありがとうございます｜樺太食堂</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/jpeg" href="logo/niko.jpg">
+  <link rel="apple-touch-icon" href="logo/niko.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-deep: #1c1008;
+      --color-navy: #3d2813;
+      --color-gold: #c46a2c;
+      --color-gold-light: #e0956a;
+      --color-white: #f5f0e8;
+      --color-cream: #faf6f0;
+      --font-serif: 'Shippori Mincho', 'Noto Serif JP', serif;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background-color: var(--color-deep);
+      color: var(--color-white);
+      font-family: var(--font-serif);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      padding: 2.5rem 1rem 1.5rem;
+    }
+
+    .header-logo {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      color: var(--color-white);
+      text-decoration: none;
+    }
+
+    /* ── Main ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(196, 106, 44, 0.3);
+      border-radius: 4px;
+      padding: clamp(2.5rem, 6vw, 4.5rem) clamp(2rem, 8vw, 5rem);
+      text-align: center;
+      max-width: 620px;
+      width: 100%;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1.6rem;
+      border-radius: 50%;
+      background: rgba(196, 106, 44, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: var(--color-gold-light);
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      color: var(--color-gold);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1.5;
+      margin-bottom: 1.2rem;
+    }
+
+    .gold-line {
+      width: 40px;
+      height: 2px;
+      background: var(--color-gold);
+      margin: 0 auto 1.8rem;
+    }
+
+    .message {
+      font-size: clamp(0.88rem, 2vw, 0.98rem);
+      line-height: 2;
+      color: rgba(245, 240, 232, 0.8);
+      margin-bottom: 2.5rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2.6rem;
+      border: 1px solid var(--color-gold);
+      color: var(--color-gold-light);
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--color-gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .btn:hover::before { transform: scaleX(1); }
+    .btn:hover { color: var(--color-deep); }
+
+    .btn span {
+      position: relative;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid rgba(196, 106, 44, 0.2);
+    }
+
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      color: var(--color-gold-light);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-tagline {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: rgba(245, 240, 232, 0.4);
+      margin-bottom: 1rem;
+    }
+
+    .footer-bottom {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: rgba(245, 240, 232, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="header-logo">樺太食堂</a>
+  </header>
+
+  <main>
+    <div class="card">
+      <div class="icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <p class="section-label">Thank you</p>
+      <h1>お問い合わせ<br>ありがとうございます</h1>
+      <div class="gold-line"></div>
+      <p class="message">
+        内容を確認のうえ、<br>
+        数日以内に折り返しご連絡いたします。<br>
+        しばらくお待ちください。
+      </p>
+      <a href="index.html" class="btn"><span>トップページへ戻る</span></a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-logo">樺太食堂</div>
+    <p class="footer-tagline">— 北海道稚内市 ノシャップ岬 —</p>
+    <div class="footer-bottom">
+      <p>&copy; 2026 樺太食堂 All Rights Reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
