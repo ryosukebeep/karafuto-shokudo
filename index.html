@@ -1220,7 +1220,6 @@
            href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">
           Tweets by karafuto_
         </a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
       </div>
     </div>
   </section>
@@ -1384,27 +1383,46 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // ── Hide loading spinner when Twitter widget loads ──
-    window.addEventListener('load', function() {
-      if (window.twttr && window.twttr.widgets) {
-        window.twttr.widgets.load().then(function() {
-          const spinner = document.getElementById('twitter-loading');
-          if (spinner) {
-            spinner.classList.add('hidden');
-            setTimeout(() => spinner.remove(), 300);
-          }
-        });
-      } else {
-        // Fallback: hide spinner after 3 seconds
-        setTimeout(function() {
-          const spinner = document.getElementById('twitter-loading');
-          if (spinner) {
-            spinner.classList.add('hidden');
-            setTimeout(() => spinner.remove(), 300);
-          }
-        }, 3000);
-      }
-    });
+    // ── Lazy-load Twitter widget when SNS section enters viewport ──
+    (function() {
+      var twitterContainer = document.getElementById('twitter-container');
+      if (!twitterContainer) return;
+
+      var widgetLoaded = false;
+      var snsObserver = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !widgetLoaded) {
+          widgetLoaded = true;
+          snsObserver.disconnect();
+
+          var s = document.createElement('script');
+          s.src = 'https://platform.twitter.com/widgets.js';
+          s.async = true;
+          s.charset = 'utf-8';
+          s.onload = function() {
+            if (window.twttr && window.twttr.widgets) {
+              window.twttr.widgets.load().then(function() {
+                var spinner = document.getElementById('twitter-loading');
+                if (spinner) {
+                  spinner.classList.add('hidden');
+                  setTimeout(function() { spinner.remove(); }, 300);
+                }
+              });
+            }
+          };
+          // Fallback: hide spinner after 5 seconds
+          setTimeout(function() {
+            var spinner = document.getElementById('twitter-loading');
+            if (spinner) {
+              spinner.classList.add('hidden');
+              setTimeout(function() { spinner.remove(); }, 300);
+            }
+          }, 5000);
+          twitterContainer.appendChild(s);
+        }
+      }, { threshold: 0.1 });
+
+      snsObserver.observe(twitterContainer);
+    })();
 
     // ── Set cookie on form submit (persists across redirect) ──
     var contactForm = document.querySelector('.contact-form');
