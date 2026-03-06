@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://platform.twitter.com https://cdn.syndication.twimg.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://platform.twitter.com https://ton.twimg.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: blob: https:;
+    frame-src https://www.google.com https://twitter.com https://platform.twitter.com;
+    connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com https://api.twitter.com https://syndication.twitter.com;
+    form-action 'self' https://formsubmit.co;
+  ">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKCC5715LR"></script>
   <script>
@@ -9,9 +21,7 @@
     gtag('js', new Date());
     gtag('config', 'G-KKCC5715LR');
   </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>樺太食堂 | 北海道の海鮮丼 - 創業50周年</title>
+  <title>樺太食堂｜無敵の生うに丼</title>
   <meta name="description" content="北海道・樺太食堂。創業50周年を迎えた海鮮丼の名店。新鮮な北の幸をお届けします。">
   <link rel="icon" type="image/jpeg" href="logo/niko.jpg">
   <link rel="apple-touch-icon" href="logo/niko.jpg">
@@ -1262,7 +1272,6 @@
         内容を確認のうえ、数日以内に折り返しご連絡させていただきます。
       </div>
       <form action="https://formsubmit.co/25626c19aad6fff2bf638255290236c3" method="POST" class="contact-form">
-        <input type="hidden" name="_cc" value="karafuto.info@unidon.jp">
         <input type="hidden" name="_subject" value="【樺太食堂HP】お問い合わせがありました">
         <input type="hidden" name="_captcha" value="true">
         <input type="hidden" name="_template" value="table">
@@ -1397,11 +1406,24 @@
       }
     });
 
-    // __ Show thank you banner ──
+    // ── Set cookie on form submit (persists across redirect) ──
+    var contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', function() {
+        document.cookie = 'formSubmitted=1; path=/; max-age=120; SameSite=Strict';
+      });
+    }
+
+    // ── Show thank you banner (requires both URL param AND submit cookie) ──
     (function() {
       try {
         var params = new URLSearchParams(window.location.search || "");
-        if (params.get('sent') === '1') {
+        var hasCookie = document.cookie.split(';').some(function(c) {
+          return c.trim() === 'formSubmitted=1';
+        });
+        if (params.get('sent') === '1' && hasCookie) {
+          // Consume the cookie immediately
+          document.cookie = 'formSubmitted=; path=/; max-age=0; SameSite=Strict';
           var banner = document.getElementById('thankyou-banner');
           if (banner) {
             banner.classList.add('visible');
