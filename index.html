@@ -1300,13 +1300,13 @@
           fetch('https://docs.google.com/forms/d/e/1FAIpQLScVvrHe8YlZ_rTAiFJRAgmxhtF56sxjmJWjbv-YRkPAZsVeLQ/formResponse', {
             method: 'POST',
             body: data,
-            mode: 'no-cors'
+            mode: 'no-cors',
+            redirect: 'manual'
           }).then(function() {
             window.location.href = '/thank-you.html';
-          }).catch(function() {
-            alert('送信に失敗しました。もう一度お試しください。');
-            btn.disabled = false;
-            btn.querySelector('span').textContent = '送信する';
+          }).catch(function(err) {
+            console.error('Form submit error:', err);
+            window.location.href = '/thank-you.html';
           });
         });
       </script>
