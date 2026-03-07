@@ -9,7 +9,7 @@
     font-src 'self' https://fonts.gstatic.com;
     img-src 'self' data: blob: https:;
     frame-src https://www.google.com https://docs.google.com https://twitter.com https://platform.twitter.com;
-    connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com https://api.twitter.com https://syndication.twitter.com https://docs.google.com;
+    connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com https://api.twitter.com https://syndication.twitter.com;
     form-action 'self' https://docs.google.com;
   ">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +27,8 @@
   <link rel="apple-touch-icon" href="logo/niko.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://platform.twitter.com">
+  <link rel="preconnect" href="https://cdn.syndication.twimg.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
@@ -785,36 +787,6 @@
       margin: 0 auto 3rem;
     }
 
-    .thankyou-banner {
-      display: none;
-      margin-bottom: 2rem;
-      padding: 1.5rem;
-      background: linear-gradient(135deg, #fff7e9 0%, #fffaf0 100%);
-      border: 1px solid var(--color-gold-light);
-      border-radius: 15px;
-      color: #5a3a10;
-      font-size: 0.95rem;
-      line-height: 2;
-      letter-spacing: 0.05em;
-      box-shadow: 0 10px 30px rgba(196, 106, 44, 0.2);
-    }
-
-    .thankyou-banner.visible {
-      display: block;
-      animation: slideDown 0.5s ease-out;
-    }
-
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
     .contact-form {
       text-align: left;
       background: rgba(255, 255, 255, 0.6);
@@ -1262,10 +1234,6 @@
       <p class="section-label">お問い合わせ</p>
       <h2 class="section-title"><span class="accent">ご質問</span>など</h2>
       <div class="gold-line"></div>
-      <div id="thankyou-banner" class="thankyou-banner">
-        お問い合わせありがとうございます。<br>
-        内容を確認のうえ、数日以内に折り返しご連絡させていただきます。
-      </div>
       <iframe name="hidden-iframe" id="hidden-iframe" style="display:none"></iframe>
       <form id="contact-form" class="contact-form"
             action="https://docs.google.com/forms/d/e/1FAIpQLScVvrHe8YlZ_rTAiFJRAgmxhtF56sxjmJWjbv-YRkPAZsVeLQ/formResponse"
@@ -1389,78 +1357,34 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // ── Lazy-load Twitter widget when SNS section enters viewport ──
+    // ── Twitter widget: preload early, show when ready ──
     (function() {
       var twitterContainer = document.getElementById('twitter-container');
       if (!twitterContainer) return;
 
-      var widgetLoaded = false;
-      var snsObserver = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !widgetLoaded) {
-          widgetLoaded = true;
-          snsObserver.disconnect();
-
-          var s = document.createElement('script');
-          s.src = 'https://platform.twitter.com/widgets.js';
-          s.async = true;
-          s.charset = 'utf-8';
-          s.onload = function() {
-            if (window.twttr && window.twttr.widgets) {
-              window.twttr.widgets.load().then(function() {
-                var spinner = document.getElementById('twitter-loading');
-                if (spinner) {
-                  spinner.classList.add('hidden');
-                  setTimeout(function() { spinner.remove(); }, 300);
-                }
-              });
-            }
-          };
-          // Fallback: hide spinner after 5 seconds
-          setTimeout(function() {
-            var spinner = document.getElementById('twitter-loading');
-            if (spinner) {
-              spinner.classList.add('hidden');
-              setTimeout(function() { spinner.remove(); }, 300);
-            }
-          }, 5000);
-          twitterContainer.appendChild(s);
+      function hideSpinner() {
+        var spinner = document.getElementById('twitter-loading');
+        if (spinner) {
+          spinner.classList.add('hidden');
+          setTimeout(function() { spinner.remove(); }, 300);
         }
-      }, { threshold: 0.1 });
-
-      snsObserver.observe(twitterContainer);
-    })();
-
-    // ── Set cookie on form submit (persists across redirect) ──
-    var contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-      contactForm.addEventListener('submit', function() {
-        document.cookie = 'formSubmitted=1; path=/; max-age=120; SameSite=Strict';
-      });
-    }
-
-    // ── Show thank you banner (requires both URL param AND submit cookie) ──
-    (function() {
-      try {
-        var params = new URLSearchParams(window.location.search || "");
-        var hasCookie = document.cookie.split(';').some(function(c) {
-          return c.trim() === 'formSubmitted=1';
-        });
-        if (params.get('sent') === '1' && hasCookie) {
-          // Consume the cookie immediately
-          document.cookie = 'formSubmitted=; path=/; max-age=0; SameSite=Strict';
-          var banner = document.getElementById('thankyou-banner');
-          if (banner) {
-            banner.classList.add('visible');
-          }
-          var contactSection = document.getElementById('contact');
-          if (contactSection) {
-            contactSection.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
-      } catch (e) {
-        // fail silently
       }
+
+      // Start loading widget script after page load (not on scroll)
+      var s = document.createElement('script');
+      s.src = 'https://platform.twitter.com/widgets.js';
+      s.async = true;
+      s.charset = 'utf-8';
+      s.onload = function() {
+        if (window.twttr && window.twttr.widgets) {
+          window.twttr.widgets.load().then(hideSpinner);
+        }
+      };
+      // Fallback: hide spinner after 8 seconds
+      setTimeout(hideSpinner, 8000);
+      twitterContainer.appendChild(s);
     })();
+
   </script>
 
 </body>
