@@ -1266,12 +1266,8 @@
         お問い合わせありがとうございます。<br>
         内容を確認のうえ、数日以内に折り返しご連絡させていただきます。
       </div>
-      <form action="https://formsubmit.co/25626c19aad6fff2bf638255290236c3" method="POST" class="contact-form">
-        <input type="hidden" name="_subject" value="【樺太食堂HP】お問い合わせがありました">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
+      <form id="contact-form" class="contact-form">
         <input type="text" name="_honey" style="display:none">
-        <input type="hidden" name="_next" value="https://unidon.jp/thank-you.html">
 
         <div class="form-group">
           <label for="name">お名前</label>
@@ -1291,6 +1287,35 @@
         </div>
         <button type="submit" class="form-submit"><span>送信する</span></button>
       </form>
+      <script>
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+          e.preventDefault();
+          var form = this;
+          var btn = form.querySelector('.form-submit');
+          btn.disabled = true;
+          btn.querySelector('span').textContent = '送信中...';
+          var data = new FormData(form);
+          data.append('_subject', '【樺太食堂HP】お問い合わせがありました');
+          data.append('_captcha', 'false');
+          data.append('_template', 'table');
+          fetch('https://formsubmit.co/ajax/25626c19aad6fff2bf638255290236c3', {
+            method: 'POST',
+            body: data
+          }).then(function(res) {
+            if (res.ok) {
+              window.location.href = '/thank-you.html';
+            } else {
+              alert('送信に失敗しました。もう一度お試しください。');
+              btn.disabled = false;
+              btn.querySelector('span').textContent = '送信する';
+            }
+          }).catch(function() {
+            alert('送信に失敗しました。もう一度お試しください。');
+            btn.disabled = false;
+            btn.querySelector('span').textContent = '送信する';
+          });
+        });
+      </script>
     </div>
   </section>
 
