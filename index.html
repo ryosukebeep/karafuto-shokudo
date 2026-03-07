@@ -1181,18 +1181,22 @@
       <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはXでお届けしています。</p>
 
       <div class="twitter-embed" id="twitter-container">
-        <div class="loading-spinner" id="twitter-loading">
-          <div class="spinner" id="twitter-spinner"></div>
-          <p id="twitter-loading-text">タイムラインを読み込んでいます...</p>
-          <button id="twitter-retry-btn" style="display:none; margin-top:0.5rem; padding:0.8rem 2rem; background:linear-gradient(135deg, var(--color-gold), var(--color-gold-light)); color:#fff; border:none; border-radius:50px; font-family:var(--font-serif); font-size:0.85rem; letter-spacing:0.1em; cursor:pointer; transition:all 0.3s;">タイムラインを読み込む</button>
+        <div id="twitter-loading" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:300px; gap:1.5rem;">
+          <p style="color:var(--color-gold); font-size:0.95rem; letter-spacing:0.1em;">Xの最新投稿をご覧いただけます</p>
+          <button id="twitter-load-btn" style="padding:1rem 2.5rem; background:linear-gradient(135deg, var(--color-deep), var(--color-navy)); color:var(--color-white); border:none; border-radius:50px; font-family:var(--font-serif); font-size:0.9rem; letter-spacing:0.15em; cursor:pointer; transition:all 0.3s; box-shadow:0 10px 30px rgba(28,16,8,0.3); position:relative; overflow:hidden;">
+            <span style="position:relative; z-index:1;">タイムラインを表示</span>
+          </button>
+          <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" style="color:var(--color-gold); font-size:0.8rem; letter-spacing:0.1em; text-decoration:none;">Xで直接見る →</a>
         </div>
-        <a class="twitter-timeline"
-           data-lang="ja"
-           data-height="500"
-           data-theme="light"
-           href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">
-          Tweets by karafuto_
-        </a>
+        <div id="twitter-timeline-area" style="display:none;">
+          <a class="twitter-timeline"
+             data-lang="ja"
+             data-height="500"
+             data-theme="light"
+             href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">
+            Tweets by karafuto_
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -1358,64 +1362,20 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // ── Twitter widget: auto-load, show retry button if slow ──
+    // ── Twitter widget: load on user click ──
     (function() {
+      var loadBtn = document.getElementById('twitter-load-btn');
+      var loadingEl = document.getElementById('twitter-loading');
+      var timelineArea = document.getElementById('twitter-timeline-area');
       var twitterContainer = document.getElementById('twitter-container');
-      if (!twitterContainer) return;
-      var done = false;
+      if (!loadBtn || !twitterContainer) return;
 
-      function hideSpinner() {
-        if (done) return;
-        done = true;
-        var spinner = document.getElementById('twitter-loading');
-        if (spinner) {
-          spinner.classList.add('hidden');
-          setTimeout(function() { spinner.remove(); }, 300);
-        }
-      }
+      loadBtn.addEventListener('click', function() {
+        loadBtn.querySelector('span').textContent = '読み込み中...';
+        loadBtn.style.pointerEvents = 'none';
+        loadBtn.style.opacity = '0.6';
 
-      function showRetryButton() {
-        if (done) return;
-        var spinner = document.getElementById('twitter-spinner');
-        var text = document.getElementById('twitter-loading-text');
-        var btn = document.getElementById('twitter-retry-btn');
-        if (spinner) spinner.style.display = 'none';
-        if (text) text.textContent = '読み込みに時間がかかっています';
-        if (btn) btn.style.display = 'inline-block';
-      }
-
-      // Check if timeline iframe actually rendered
-      function waitForIframe(timeout) {
-        var start = Date.now();
-        var check = setInterval(function() {
-          var iframe = twitterContainer.querySelector('iframe.twitter-timeline-rendered, iframe[id*="twitter"]');
-          if (iframe) {
-            clearInterval(check);
-            hideSpinner();
-          } else if (Date.now() - start > timeout) {
-            clearInterval(check);
-            showRetryButton();
-          }
-        }, 500);
-      }
-
-      function loadWidget() {
-        done = false;
-        var loadingEl = document.getElementById('twitter-loading');
-        if (loadingEl) {
-          loadingEl.classList.remove('hidden');
-          loadingEl.style.display = '';
-        }
-        var spinner = document.getElementById('twitter-spinner');
-        var text = document.getElementById('twitter-loading-text');
-        var btn = document.getElementById('twitter-retry-btn');
-        if (spinner) spinner.style.display = '';
-        if (text) text.textContent = 'タイムラインを読み込んでいます...';
-        if (btn) btn.style.display = 'none';
-
-        var existing = twitterContainer.querySelector('script[src*="platform.twitter.com"]');
-        if (existing) existing.remove();
-
+        timelineArea.style.display = '';
         var s = document.createElement('script');
         s.src = 'https://platform.twitter.com/widgets.js';
         s.async = true;
@@ -1424,21 +1384,15 @@
           if (window.twttr && window.twttr.widgets) {
             window.twttr.widgets.load();
           }
-          waitForIframe(8000);
+          setTimeout(function() { loadingEl.style.display = 'none'; }, 2000);
         };
-        s.onerror = showRetryButton;
+        s.onerror = function() {
+          loadBtn.querySelector('span').textContent = 'タイムラインを表示';
+          loadBtn.style.pointerEvents = '';
+          loadBtn.style.opacity = '';
+        };
         twitterContainer.appendChild(s);
-      }
-
-      var retryBtn = document.getElementById('twitter-retry-btn');
-      if (retryBtn) {
-        retryBtn.addEventListener('click', function() {
-          if (window.twttr) { delete window.twttr; }
-          loadWidget();
-        });
-      }
-
-      loadWidget();
+      });
     })();
 
   </script>
