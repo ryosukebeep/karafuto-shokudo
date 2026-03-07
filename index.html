@@ -1182,8 +1182,9 @@
 
       <div class="twitter-embed" id="twitter-container">
         <div class="loading-spinner" id="twitter-loading">
-          <div class="spinner"></div>
-          <p>タイムラインを読み込んでいます...</p>
+          <div class="spinner" id="twitter-spinner"></div>
+          <p id="twitter-loading-text">タイムラインを読み込んでいます...</p>
+          <button id="twitter-retry-btn" style="display:none; margin-top:0.5rem; padding:0.8rem 2rem; background:linear-gradient(135deg, var(--color-gold), var(--color-gold-light)); color:#fff; border:none; border-radius:50px; font-family:var(--font-serif); font-size:0.85rem; letter-spacing:0.1em; cursor:pointer; transition:all 0.3s;">タイムラインを読み込む</button>
         </div>
         <a class="twitter-timeline"
            data-lang="ja"
@@ -1357,12 +1358,15 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // ── Twitter widget: preload early, show when ready ──
+    // ── Twitter widget: auto-load, show retry button if slow ──
     (function() {
       var twitterContainer = document.getElementById('twitter-container');
       if (!twitterContainer) return;
+      var loaded = false;
 
       function hideSpinner() {
+        if (loaded) return;
+        loaded = true;
         var spinner = document.getElementById('twitter-loading');
         if (spinner) {
           spinner.classList.add('hidden');
@@ -1370,19 +1374,49 @@
         }
       }
 
-      // Start loading widget script after page load (not on scroll)
-      var s = document.createElement('script');
-      s.src = 'https://platform.twitter.com/widgets.js';
-      s.async = true;
-      s.charset = 'utf-8';
-      s.onload = function() {
-        if (window.twttr && window.twttr.widgets) {
-          window.twttr.widgets.load().then(hideSpinner);
-        }
-      };
-      // Fallback: hide spinner after 8 seconds
-      setTimeout(hideSpinner, 8000);
-      twitterContainer.appendChild(s);
+      function showRetryButton() {
+        if (loaded) return;
+        var spinner = document.getElementById('twitter-spinner');
+        var text = document.getElementById('twitter-loading-text');
+        var btn = document.getElementById('twitter-retry-btn');
+        if (spinner) spinner.style.display = 'none';
+        if (text) text.textContent = '読み込みに時間がかかっています';
+        if (btn) btn.style.display = 'inline-block';
+      }
+
+      function loadWidget() {
+        var existing = twitterContainer.querySelector('script[src*="platform.twitter.com"]');
+        if (existing) existing.remove();
+        var spinner = document.getElementById('twitter-spinner');
+        var text = document.getElementById('twitter-loading-text');
+        var btn = document.getElementById('twitter-retry-btn');
+        if (spinner) spinner.style.display = '';
+        if (text) text.textContent = 'タイムラインを読み込んでいます...';
+        if (btn) btn.style.display = 'none';
+
+        var s = document.createElement('script');
+        s.src = 'https://platform.twitter.com/widgets.js';
+        s.async = true;
+        s.charset = 'utf-8';
+        s.onload = function() {
+          if (window.twttr && window.twttr.widgets) {
+            window.twttr.widgets.load().then(hideSpinner);
+          }
+        };
+        s.onerror = showRetryButton;
+        setTimeout(showRetryButton, 6000);
+        twitterContainer.appendChild(s);
+      }
+
+      var retryBtn = document.getElementById('twitter-retry-btn');
+      if (retryBtn) {
+        retryBtn.addEventListener('click', function() {
+          if (window.twttr) { delete window.twttr; }
+          loadWidget();
+        });
+      }
+
+      loadWidget();
     })();
 
   </script>
