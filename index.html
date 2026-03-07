@@ -10,7 +10,7 @@
     img-src 'self' data: blob: https:;
     frame-src https://www.google.com https://twitter.com https://platform.twitter.com;
     connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com https://api.twitter.com https://syndication.twitter.com https://docs.google.com;
-    form-action 'self';
+    form-action 'self' https://docs.google.com;
   ">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Google tag (gtag.js) -->
@@ -1266,7 +1266,10 @@
         お問い合わせありがとうございます。<br>
         内容を確認のうえ、数日以内に折り返しご連絡させていただきます。
       </div>
-      <form id="contact-form" class="contact-form">
+      <iframe name="hidden-iframe" id="hidden-iframe" style="display:none"></iframe>
+      <form id="contact-form" class="contact-form"
+            action="https://docs.google.com/forms/d/e/1FAIpQLScVvrHe8YlZ_rTAiFJRAgmxhtF56sxjmJWjbv-YRkPAZsVeLQ/formResponse"
+            method="POST" target="hidden-iframe">
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
         <div class="form-group">
           <label for="name">お名前</label>
@@ -1288,26 +1291,14 @@
       </form>
       <script>
         document.getElementById('contact-form').addEventListener('submit', function(e) {
-          e.preventDefault();
-          var form = this;
-          var btn = form.querySelector('.form-submit');
+          var honey = this.querySelector('[name="_honey"]');
+          if (honey && honey.value) { e.preventDefault(); return; }
+          var btn = this.querySelector('.form-submit');
           btn.disabled = true;
           btn.querySelector('span').textContent = '送信中...';
-          var honey = form.querySelector('[name="_honey"]');
-          if (honey && honey.value) return;
-          var data = new FormData(form);
-          data.delete('_honey');
-          fetch('https://docs.google.com/forms/d/e/1FAIpQLScVvrHe8YlZ_rTAiFJRAgmxhtF56sxjmJWjbv-YRkPAZsVeLQ/formResponse', {
-            method: 'POST',
-            body: data,
-            mode: 'no-cors',
-            redirect: 'manual'
-          }).then(function() {
+          setTimeout(function() {
             window.location.href = '/thank-you.html';
-          }).catch(function(err) {
-            console.error('Form submit error:', err);
-            window.location.href = '/thank-you.html';
-          });
+          }, 1000);
         });
       </script>
     </div>
