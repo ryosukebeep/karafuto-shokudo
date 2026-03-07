@@ -1362,11 +1362,11 @@
     (function() {
       var twitterContainer = document.getElementById('twitter-container');
       if (!twitterContainer) return;
-      var loaded = false;
+      var done = false;
 
       function hideSpinner() {
-        if (loaded) return;
-        loaded = true;
+        if (done) return;
+        done = true;
         var spinner = document.getElementById('twitter-loading');
         if (spinner) {
           spinner.classList.add('hidden');
@@ -1375,7 +1375,7 @@
       }
 
       function showRetryButton() {
-        if (loaded) return;
+        if (done) return;
         var spinner = document.getElementById('twitter-spinner');
         var text = document.getElementById('twitter-loading-text');
         var btn = document.getElementById('twitter-retry-btn');
@@ -1384,9 +1384,28 @@
         if (btn) btn.style.display = 'inline-block';
       }
 
+      // Check if timeline iframe actually rendered
+      function waitForIframe(timeout) {
+        var start = Date.now();
+        var check = setInterval(function() {
+          var iframe = twitterContainer.querySelector('iframe.twitter-timeline-rendered, iframe[id*="twitter"]');
+          if (iframe) {
+            clearInterval(check);
+            hideSpinner();
+          } else if (Date.now() - start > timeout) {
+            clearInterval(check);
+            showRetryButton();
+          }
+        }, 500);
+      }
+
       function loadWidget() {
-        var existing = twitterContainer.querySelector('script[src*="platform.twitter.com"]');
-        if (existing) existing.remove();
+        done = false;
+        var loadingEl = document.getElementById('twitter-loading');
+        if (loadingEl) {
+          loadingEl.classList.remove('hidden');
+          loadingEl.style.display = '';
+        }
         var spinner = document.getElementById('twitter-spinner');
         var text = document.getElementById('twitter-loading-text');
         var btn = document.getElementById('twitter-retry-btn');
@@ -1394,17 +1413,20 @@
         if (text) text.textContent = 'タイムラインを読み込んでいます...';
         if (btn) btn.style.display = 'none';
 
+        var existing = twitterContainer.querySelector('script[src*="platform.twitter.com"]');
+        if (existing) existing.remove();
+
         var s = document.createElement('script');
         s.src = 'https://platform.twitter.com/widgets.js';
         s.async = true;
         s.charset = 'utf-8';
         s.onload = function() {
           if (window.twttr && window.twttr.widgets) {
-            window.twttr.widgets.load().then(hideSpinner);
+            window.twttr.widgets.load();
           }
+          waitForIframe(8000);
         };
         s.onerror = showRetryButton;
-        setTimeout(showRetryButton, 6000);
         twitterContainer.appendChild(s);
       }
 
