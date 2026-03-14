@@ -1190,16 +1190,7 @@
           </button>
           <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" style="color:var(--color-gold); font-size:0.8rem; letter-spacing:0.1em; text-decoration:none;">Xで直接見る →</a>
         </div>
-        <div id="twitter-timeline-area" style="display:none;">
-          <a class="twitter-timeline"
-             data-lang="ja"
-             data-height="500"
-             data-theme="light"
-             data-chrome="noheader nofooter noborders transparent"
-             href="https://x.com/karafuto_">
-            @karafuto_ のポスト
-          </a>
-        </div>
+        <div id="twitter-timeline-area" style="display:none;"></div>
       </div>
     </div>
   </section>
@@ -1365,7 +1356,7 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // ── Twitter/X widget: load on user click ──
+    // ── X(Twitter) widget: load on user click ──
     (function() {
       var loadBtn = document.getElementById('twitter-load-btn');
       var loadingEl = document.getElementById('twitter-loading');
@@ -1373,54 +1364,83 @@
       var twitterContainer = document.getElementById('twitter-container');
       if (!loadBtn || !twitterContainer) return;
 
+      // iframeフォールバック: widgets.jsが使えない場合
+      function loadIframeFallback() {
+        timelineArea.style.display = '';
+        timelineArea.innerHTML = '<iframe src="https://syndication.twitter.com/srv/timeline-profile/screen-name/karafuto_" ' +
+          'style="width:100%; height:500px; border:none; border-radius:12px;" ' +
+          'sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox" ' +
+          'loading="lazy"></iframe>';
+        loadingEl.style.display = 'none';
+      }
+
+      // Xリンクフォールバック: すべて失敗した場合
+      function showXLink() {
+        loadingEl.innerHTML = '<p style="color:var(--color-gold); font-size:0.95rem; letter-spacing:0.1em;">タイムラインを読み込めませんでした</p>' +
+          '<a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" ' +
+          'style="display:inline-block; padding:1rem 2.5rem; background:linear-gradient(135deg, var(--color-deep), var(--color-navy)); ' +
+          'color:var(--color-white); border:none; border-radius:50px; font-family:var(--font-serif); font-size:0.9rem; ' +
+          'letter-spacing:0.15em; text-decoration:none; box-shadow:0 10px 30px rgba(28,16,8,0.3);">Xで @karafuto_ を見る</a>';
+      }
+
       loadBtn.addEventListener('click', function() {
         loadBtn.querySelector('span').textContent = '読み込み中...';
         loadBtn.style.pointerEvents = 'none';
         loadBtn.style.opacity = '0.6';
 
-        timelineArea.style.display = '';
-
-        // widgets.jsが既にロード済みの場合は再利用
-        if (window.twttr && window.twttr.widgets) {
-          window.twttr.widgets.load(timelineArea).then(function() {
-            loadingEl.style.display = 'none';
-          });
-          return;
-        }
-
+        // 方法1: widgets.js の createTimeline API を試行
         var s = document.createElement('script');
         s.src = 'https://platform.twitter.com/widgets.js';
         s.async = true;
         s.charset = 'utf-8';
+        var widgetsLoaded = false;
 
-        // twttr.ready を使った確実な初期化
-        window.twttr = window.twttr || {};
-        window.twttr._e = window.twttr._e || [];
-        window.twttr.ready = window.twttr.ready || function(f) {
-          window.twttr._e.push(f);
+        s.onload = function() {
+          widgetsLoaded = true;
+          if (window.twttr && window.twttr.widgets && window.twttr.widgets.createTimeline) {
+            timelineArea.style.display = '';
+            window.twttr.widgets.createTimeline(
+              { sourceType: 'profile', screenName: 'karafuto_' },
+              timelineArea,
+              { height: 500, lang: 'ja', theme: 'light', chrome: 'noheader nofooter noborders transparent' }
+            ).then(function(el) {
+              if (el) {
+                loadingEl.style.display = 'none';
+              } else {
+                loadIframeFallback();
+              }
+            }).catch(function() {
+              loadIframeFallback();
+            });
+          } else {
+            loadIframeFallback();
+          }
         };
 
-        window.twttr.ready(function(twttr) {
-          twttr.widgets.load(timelineArea);
-          twttr.events.bind('loaded', function() {
-            loadingEl.style.display = 'none';
-          });
-          // フォールバック: 5秒後にローディングを非表示
-          setTimeout(function() { loadingEl.style.display = 'none'; }, 5000);
-        });
-
         s.onerror = function() {
-          // widgets.jsの読み込み失敗時: Xリンクへのフォールバック表示
-          loadBtn.querySelector('span').textContent = 'Xで直接見る';
-          loadBtn.style.pointerEvents = '';
-          loadBtn.style.opacity = '';
-          loadBtn.onclick = function() {
-            window.open('https://x.com/karafuto_', '_blank');
-          };
-          timelineArea.style.display = 'none';
+          // 方法2: iframe直接埋め込みにフォールバック
+          loadIframeFallback();
+          // iframeも失敗した場合のタイムアウト
+          setTimeout(function() {
+            var iframe = timelineArea.querySelector('iframe');
+            if (iframe && (!iframe.contentWindow || iframe.clientHeight < 10)) {
+              showXLink();
+            }
+          }, 8000);
         };
 
         document.head.appendChild(s);
+
+        // 全体タイムアウト: 10秒経っても何も表示されない場合
+        setTimeout(function() {
+          if (loadingEl.style.display !== 'none') {
+            if (!widgetsLoaded) {
+              loadIframeFallback();
+            } else {
+              loadingEl.style.display = 'none';
+            }
+          }
+        }, 10000);
       });
     })();
 
