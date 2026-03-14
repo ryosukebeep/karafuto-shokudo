@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://platform.twitter.com https://cdn.syndication.twimg.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://platform.twitter.com https://ton.twimg.com;
+    script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://platform.twitter.com https://cdn.syndication.twimg.com https://platform.x.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://platform.twitter.com https://ton.twimg.com https://platform.x.com;
     font-src 'self' https://fonts.gstatic.com;
     img-src 'self' data: blob: https:;
-    frame-src https://www.google.com https://docs.google.com https://twitter.com https://platform.twitter.com;
-    connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com https://api.twitter.com https://syndication.twitter.com;
+    frame-src https://www.google.com https://docs.google.com https://twitter.com https://platform.twitter.com https://syndication.twitter.com https://x.com https://platform.x.com;
+    connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com https://api.twitter.com https://syndication.twitter.com https://api.x.com https://cdn.syndication.twimg.com;
     form-action 'self' https://docs.google.com;
   ">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,8 +27,10 @@
   <link rel="apple-touch-icon" href="logo/niko.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="twitter:widgets:csp" content="on">
   <link rel="preconnect" href="https://platform.twitter.com">
   <link rel="preconnect" href="https://cdn.syndication.twimg.com">
+  <link rel="preconnect" href="https://syndication.twitter.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
@@ -1193,8 +1195,9 @@
              data-lang="ja"
              data-height="500"
              data-theme="light"
-             href="https://twitter.com/karafuto_?ref_src=twsrc%5Etfw">
-            Tweets by karafuto_
+             data-chrome="noheader nofooter noborders transparent"
+             href="https://x.com/karafuto_">
+            @karafuto_ のポスト
           </a>
         </div>
       </div>
@@ -1362,7 +1365,7 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // ── Twitter widget: load on user click ──
+    // ── Twitter/X widget: load on user click ──
     (function() {
       var loadBtn = document.getElementById('twitter-load-btn');
       var loadingEl = document.getElementById('twitter-loading');
@@ -1376,22 +1379,48 @@
         loadBtn.style.opacity = '0.6';
 
         timelineArea.style.display = '';
+
+        // widgets.jsが既にロード済みの場合は再利用
+        if (window.twttr && window.twttr.widgets) {
+          window.twttr.widgets.load(timelineArea).then(function() {
+            loadingEl.style.display = 'none';
+          });
+          return;
+        }
+
         var s = document.createElement('script');
         s.src = 'https://platform.twitter.com/widgets.js';
         s.async = true;
         s.charset = 'utf-8';
-        s.onload = function() {
-          if (window.twttr && window.twttr.widgets) {
-            window.twttr.widgets.load();
-          }
-          setTimeout(function() { loadingEl.style.display = 'none'; }, 2000);
+
+        // twttr.ready を使った確実な初期化
+        window.twttr = window.twttr || {};
+        window.twttr._e = window.twttr._e || [];
+        window.twttr.ready = window.twttr.ready || function(f) {
+          window.twttr._e.push(f);
         };
+
+        window.twttr.ready(function(twttr) {
+          twttr.widgets.load(timelineArea);
+          twttr.events.bind('loaded', function() {
+            loadingEl.style.display = 'none';
+          });
+          // フォールバック: 5秒後にローディングを非表示
+          setTimeout(function() { loadingEl.style.display = 'none'; }, 5000);
+        });
+
         s.onerror = function() {
-          loadBtn.querySelector('span').textContent = 'タイムラインを表示';
+          // widgets.jsの読み込み失敗時: Xリンクへのフォールバック表示
+          loadBtn.querySelector('span').textContent = 'Xで直接見る';
           loadBtn.style.pointerEvents = '';
           loadBtn.style.opacity = '';
+          loadBtn.onclick = function() {
+            window.open('https://x.com/karafuto_', '_blank');
+          };
+          timelineArea.style.display = 'none';
         };
-        twitterContainer.appendChild(s);
+
+        document.head.appendChild(s);
       });
     })();
 
