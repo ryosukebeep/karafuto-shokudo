@@ -657,11 +657,53 @@
       box-shadow: 0 15px 50px rgba(196, 106, 44, 0.25);
     }
 
+    .news-card-images {
+      display: grid;
+      gap: 4px;
+    }
+
+    .news-card-images.is-1 {
+      grid-template-columns: 1fr;
+    }
+
+    .news-card-images.is-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .news-card-images.is-3 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .news-card-images.is-3 .news-card-image:first-child {
+      grid-column: 1 / -1;
+    }
+
+    .news-card-images.is-many {
+      grid-template-columns: 1fr 1fr;
+    }
+
     .news-card-image {
       width: 100%;
       aspect-ratio: 16 / 9;
       object-fit: cover;
       display: block;
+    }
+
+    .news-card-images.is-1 .news-card-image {
+      aspect-ratio: 16 / 9;
+    }
+
+    .news-card-images.is-2 .news-card-image,
+    .news-card-images.is-many .news-card-image {
+      aspect-ratio: 4 / 3;
+    }
+
+    .news-card-images.is-3 .news-card-image:first-child {
+      aspect-ratio: 16 / 9;
+    }
+
+    .news-card-images.is-3 .news-card-image:not(:first-child) {
+      aspect-ratio: 4 / 3;
     }
 
     .news-card-content {
@@ -744,6 +786,10 @@
     @media (max-width: 768px) {
       .news-card-content {
         padding: 1.4rem 1.2rem;
+      }
+
+      .news-card-images.is-many {
+        grid-template-columns: 1fr 1fr;
       }
 
       .x-follow-link {
@@ -1482,9 +1528,19 @@
         } else {
           newsCards.innerHTML = items.map(function(item) {
             var dateStr = item.date ? formatDate(item.date) : formatDate(item.publishedAt);
-            var imgHtml = item.image ? '<img class="news-card-image" src="' + escapeHtml(item.image.url) + '?w=600&q=80" alt="' + escapeHtml(item.title) + '" loading="lazy">' : '';
+            var imagesHtml = '';
+            var imgList = item.images || (item.image ? [item.image] : []);
+            if (imgList.length > 0) {
+              var countClass = imgList.length === 1 ? 'is-1' : imgList.length === 2 ? 'is-2' : imgList.length === 3 ? 'is-3' : 'is-many';
+              imagesHtml = '<div class="news-card-images ' + countClass + '">' +
+                imgList.map(function(img) {
+                  var url = img.url || img;
+                  return '<img class="news-card-image" src="' + escapeHtml(url) + '?w=600&q=80" alt="' + escapeHtml(item.title) + '" loading="lazy">';
+                }).join('') +
+                '</div>';
+            }
             return '<article class="news-card">' +
-              imgHtml +
+              imagesHtml +
               '<div class="news-card-content">' +
               '<time class="news-card-date">' + escapeHtml(dateStr) + '</time>' +
               '<h3 class="news-card-title">' + escapeHtml(item.title) + '</h3>' +
