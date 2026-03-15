@@ -749,41 +749,86 @@
       letter-spacing: 0.1em;
     }
 
-    /* ── X Follow Button ── */
-    .x-follow-link {
+    /* ── X Follow CTA Card ── */
+    .x-follow-card {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .x-follow-card-inner {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(196, 106, 44, 0.08) 100%);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      border: 1px solid rgba(196, 106, 44, 0.25);
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .x-follow-card-inner:hover {
+      border-color: rgba(196, 106, 44, 0.4);
+      box-shadow: 0 10px 40px rgba(196, 106, 44, 0.15);
+    }
+
+    .x-follow-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(196, 106, 44, 0.3);
+    }
+
+    .x-follow-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--color-white);
+    }
+
+    .x-follow-text {
+      color: var(--color-white);
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .x-follow-btn {
       display: inline-flex;
       align-items: center;
       gap: 0.8rem;
-      padding: 1rem 2.5rem;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(15px);
+      padding: 1.1rem 3rem;
+      background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
       color: var(--color-white);
       text-decoration: none;
       font-family: var(--font-serif);
-      font-size: 0.9rem;
+      font-size: 1rem;
+      font-weight: 700;
       letter-spacing: 0.15em;
       border-radius: 50px;
-      border: 1px solid rgba(196, 106, 44, 0.25);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 25px rgba(196, 106, 44, 0.4);
     }
 
-    .x-follow-link:hover {
-      background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
-      border-color: var(--color-gold);
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(196, 106, 44, 0.3);
+    .x-follow-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 35px rgba(196, 106, 44, 0.5);
     }
 
-    .x-follow-link svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--color-gold);
-      transition: fill 0.3s;
-    }
-
-    .x-follow-link:hover svg {
+    .x-follow-btn svg {
+      width: 20px;
+      height: 20px;
       fill: var(--color-white);
+    }
+
+    .x-follow-sub {
+      color: rgba(245, 242, 235, 0.5);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      margin-top: 1.2rem;
     }
 
     @media (max-width: 768px) {
@@ -795,9 +840,13 @@
         grid-template-columns: 1fr 1fr;
       }
 
-      .x-follow-link {
-        padding: 0.9rem 2rem;
-        font-size: 0.85rem;
+      .x-follow-card-inner {
+        padding: 2rem 1.5rem;
+      }
+
+      .x-follow-btn {
+        padding: 1rem 2rem;
+        font-size: 0.9rem;
       }
     }
 
@@ -1332,11 +1381,20 @@
         <div class="news-cards" id="news-cards" style="display:none;"></div>
       </div>
 
-      <!-- Xフォローリンク -->
-      <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="x-follow-link">
-        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        <span>@karafuto_ をフォロー</span>
-      </a>
+      <!-- X フォローCTA -->
+      <div class="x-follow-card">
+        <div class="x-follow-card-inner">
+          <div class="x-follow-icon">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          <p class="x-follow-text">最新の営業情報・仕入れ状況はXで発信中</p>
+          <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="x-follow-btn">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            <span>@karafuto_ をフォローする</span>
+          </a>
+          <p class="x-follow-sub">フォローして最新情報をお見逃しなく</p>
+        </div>
+      </div>
     </div>
   </section>
 
