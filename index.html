@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://platform.twitter.com https://cdn.syndication.twimg.com https://platform.x.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://platform.twitter.com https://ton.twimg.com https://platform.x.com;
+    script-src 'self' 'unsafe-inline' https://www.googletagmanager.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     img-src 'self' data: blob: https:;
-    frame-src https://www.google.com https://docs.google.com https://twitter.com https://platform.twitter.com https://syndication.twitter.com https://x.com https://platform.x.com;
-    connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com https://api.twitter.com https://syndication.twitter.com https://api.x.com https://cdn.syndication.twimg.com;
+    frame-src https://www.google.com https://docs.google.com;
+    connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com https://*.microcms.io https://*.microcms-assets.io;
     form-action 'self' https://docs.google.com;
   ">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,10 +27,6 @@
   <link rel="apple-touch-icon" href="logo/niko.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <meta name="twitter:widgets:csp" content="on">
-  <link rel="preconnect" href="https://platform.twitter.com">
-  <link rel="preconnect" href="https://cdn.syndication.twimg.com">
-  <link rel="preconnect" href="https://syndication.twitter.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
@@ -604,49 +600,28 @@
       margin-bottom: 3rem;
     }
 
-    .twitter-embed {
-      background: rgba(250, 246, 240, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-      overflow: hidden;
-      min-height: 500px;
-      position: relative;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(196, 106, 44, 0.2);
-    }
-
-    .loading-spinner {
-      position: absolute;
-      inset: 0;
+    /* ── News Cards ── */
+    .news-loading {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      min-height: 200px;
       gap: 1.5rem;
-      background: rgba(250, 246, 240, 0.95);
-      z-index: 10;
-      transition: opacity 0.3s ease-out;
     }
 
-    .loading-spinner.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid rgba(196, 106, 44, 0.2);
+    .news-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(196, 106, 44, 0.2);
       border-top-color: var(--color-gold);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
 
-    .loading-spinner p {
+    .news-loading p {
       color: var(--color-gold);
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       letter-spacing: 0.1em;
     }
 
@@ -655,9 +630,109 @@
       100% { transform: rotate(360deg); }
     }
 
-    .twitter-timeline {
-      width: 100% !important;
-      max-width: 100%;
+    .news-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      text-align: left;
+    }
+
+    .news-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 1.8rem 2rem;
+      border: 1px solid rgba(196, 106, 44, 0.15);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .news-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(196, 106, 44, 0.35);
+      box-shadow: 0 10px 40px rgba(196, 106, 44, 0.15);
+    }
+
+    .news-card-date {
+      font-size: 0.75rem;
+      color: var(--color-gold);
+      letter-spacing: 0.15em;
+      margin-bottom: 0.6rem;
+      font-weight: 700;
+    }
+
+    .news-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-white);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .news-card-body {
+      font-size: 0.9rem;
+      color: rgba(245, 242, 235, 0.7);
+      line-height: 1.9;
+      letter-spacing: 0.04em;
+    }
+
+    .news-empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: rgba(245, 242, 235, 0.5);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── X Follow Button ── */
+    .x-follow-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 2.5rem;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(15px);
+      color: var(--color-white);
+      text-decoration: none;
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      border-radius: 50px;
+      border: 1px solid rgba(196, 106, 44, 0.25);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .x-follow-link:hover {
+      background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+      border-color: var(--color-gold);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(196, 106, 44, 0.3);
+    }
+
+    .x-follow-link svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--color-gold);
+      transition: fill 0.3s;
+    }
+
+    .x-follow-link:hover svg {
+      fill: var(--color-white);
+    }
+
+    @media (max-width: 768px) {
+      .news-card {
+        padding: 1.4rem 1.2rem;
+      }
+
+      .x-follow-link {
+        padding: 0.9rem 2rem;
+        font-size: 0.85rem;
+      }
     }
 
     /* ── Access Section ── */
@@ -1180,18 +1255,22 @@
       <p class="section-label">お知らせ</p>
       <h2 class="section-title">最新<span class="accent">情報</span></h2>
       <div class="gold-line"></div>
-      <p class="sns-text">営業日や仕入れ状況など、最新のお知らせはXでお届けしています。</p>
+      <p class="sns-text">営業日や仕入れ状況など、最新のお知らせをお届けしています。</p>
 
-      <div class="twitter-embed" id="twitter-container">
-        <div id="twitter-loading" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:300px; gap:1.5rem;">
-          <p style="color:var(--color-gold); font-size:0.95rem; letter-spacing:0.1em;">Xの最新投稿をご覧いただけます</p>
-          <button id="twitter-load-btn" style="padding:1rem 2.5rem; background:linear-gradient(135deg, var(--color-deep), var(--color-navy)); color:var(--color-white); border:none; border-radius:50px; font-family:var(--font-serif); font-size:0.9rem; letter-spacing:0.15em; cursor:pointer; transition:all 0.3s; box-shadow:0 10px 30px rgba(28,16,8,0.3); position:relative; overflow:hidden;">
-            <span style="position:relative; z-index:1;">タイムラインを表示</span>
-          </button>
-          <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" style="color:var(--color-gold); font-size:0.8rem; letter-spacing:0.1em; text-decoration:none;">Xで直接見る →</a>
+      <!-- お知らせカードリスト -->
+      <div id="news-container">
+        <div class="news-loading" id="news-loading">
+          <div class="news-spinner"></div>
+          <p>お知らせを読み込み中...</p>
         </div>
-        <div id="twitter-timeline-area" style="display:none;"></div>
+        <div class="news-cards" id="news-cards" style="display:none;"></div>
       </div>
+
+      <!-- Xフォローリンク -->
+      <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" class="x-follow-link">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <span>@karafuto_ をフォロー</span>
+      </a>
     </div>
   </section>
 
@@ -1356,91 +1435,74 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // ── X(Twitter) widget: load on user click ──
+    // ── microCMS お知らせ取得 ──
     (function() {
-      var loadBtn = document.getElementById('twitter-load-btn');
-      var loadingEl = document.getElementById('twitter-loading');
-      var timelineArea = document.getElementById('twitter-timeline-area');
-      var twitterContainer = document.getElementById('twitter-container');
-      if (!loadBtn || !twitterContainer) return;
+      // TODO: microCMSのサービスドメインとAPIキーを設定してください
+      var MICROCMS_SERVICE = 'karafuto';
+      var MICROCMS_API_KEY = 'y8NIfRpU7Nq3hbJgQUEmgzxUUEfMcAZTZLpf';
 
-      // iframeフォールバック: widgets.jsが使えない場合
-      function loadIframeFallback() {
-        timelineArea.style.display = '';
-        timelineArea.innerHTML = '<iframe src="https://syndication.twitter.com/srv/timeline-profile/screen-name/karafuto_" ' +
-          'style="width:100%; height:500px; border:none; border-radius:12px;" ' +
-          'sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox" ' +
-          'loading="lazy"></iframe>';
-        loadingEl.style.display = 'none';
+      var newsLoading = document.getElementById('news-loading');
+      var newsCards = document.getElementById('news-cards');
+      if (!newsCards) return;
+
+      function formatDate(dateStr) {
+        var d = new Date(dateStr);
+        var y = d.getFullYear();
+        var m = ('0' + (d.getMonth() + 1)).slice(-2);
+        var day = ('0' + d.getDate()).slice(-2);
+        return y + '.' + m + '.' + day;
       }
 
-      // Xリンクフォールバック: すべて失敗した場合
-      function showXLink() {
-        loadingEl.innerHTML = '<p style="color:var(--color-gold); font-size:0.95rem; letter-spacing:0.1em;">タイムラインを読み込めませんでした</p>' +
-          '<a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" ' +
-          'style="display:inline-block; padding:1rem 2.5rem; background:linear-gradient(135deg, var(--color-deep), var(--color-navy)); ' +
-          'color:var(--color-white); border:none; border-radius:50px; font-family:var(--font-serif); font-size:0.9rem; ' +
-          'letter-spacing:0.15em; text-decoration:none; box-shadow:0 10px 30px rgba(28,16,8,0.3);">Xで @karafuto_ を見る</a>';
+      function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
       }
 
-      loadBtn.addEventListener('click', function() {
-        loadBtn.querySelector('span').textContent = '読み込み中...';
-        loadBtn.style.pointerEvents = 'none';
-        loadBtn.style.opacity = '0.6';
+      function renderNews(items) {
+        if (!items || items.length === 0) {
+          newsCards.innerHTML = '<div class="news-empty">現在お知らせはありません</div>';
+        } else {
+          newsCards.innerHTML = items.map(function(item) {
+            var dateStr = item.date ? formatDate(item.date) : formatDate(item.publishedAt);
+            return '<article class="news-card">' +
+              '<time class="news-card-date">' + escapeHtml(dateStr) + '</time>' +
+              '<h3 class="news-card-title">' + escapeHtml(item.title) + '</h3>' +
+              (item.body ? '<p class="news-card-body">' + escapeHtml(item.body) + '</p>' : '') +
+              '</article>';
+          }).join('');
+        }
+        newsLoading.style.display = 'none';
+        newsCards.style.display = '';
+      }
 
-        // 方法1: widgets.js の createTimeline API を試行
-        var s = document.createElement('script');
-        s.src = 'https://platform.twitter.com/widgets.js';
-        s.async = true;
-        s.charset = 'utf-8';
-        var widgetsLoaded = false;
+      function showError() {
+        newsCards.innerHTML = '<div class="news-empty">お知らせの読み込みに失敗しました。<br>最新情報は <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" style="color:var(--color-gold);">X (@karafuto_)</a> をご覧ください。</div>';
+        newsLoading.style.display = 'none';
+        newsCards.style.display = '';
+      }
 
-        s.onload = function() {
-          widgetsLoaded = true;
-          if (window.twttr && window.twttr.widgets && window.twttr.widgets.createTimeline) {
-            timelineArea.style.display = '';
-            window.twttr.widgets.createTimeline(
-              { sourceType: 'profile', screenName: 'karafuto_' },
-              timelineArea,
-              { height: 500, lang: 'ja', theme: 'light', chrome: 'noheader nofooter noborders transparent' }
-            ).then(function(el) {
-              if (el) {
-                loadingEl.style.display = 'none';
-              } else {
-                loadIframeFallback();
-              }
-            }).catch(function() {
-              loadIframeFallback();
-            });
-          } else {
-            loadIframeFallback();
-          }
-        };
+      // APIキー未設定時はプレースホルダーを表示
+      if (MICROCMS_API_KEY === 'YOUR_API_KEY') {
+        newsCards.innerHTML = '<div class="news-empty">microCMS連携準備中です。<br>最新情報は <a href="https://x.com/karafuto_" target="_blank" rel="noopener noreferrer" style="color:var(--color-gold);">X (@karafuto_)</a> をご覧ください。</div>';
+        newsLoading.style.display = 'none';
+        newsCards.style.display = '';
+        return;
+      }
 
-        s.onerror = function() {
-          // 方法2: iframe直接埋め込みにフォールバック
-          loadIframeFallback();
-          // iframeも失敗した場合のタイムアウト
-          setTimeout(function() {
-            var iframe = timelineArea.querySelector('iframe');
-            if (iframe && (!iframe.contentWindow || iframe.clientHeight < 10)) {
-              showXLink();
-            }
-          }, 8000);
-        };
-
-        document.head.appendChild(s);
-
-        // 全体タイムアウト: 10秒経っても何も表示されない場合
-        setTimeout(function() {
-          if (loadingEl.style.display !== 'none') {
-            if (!widgetsLoaded) {
-              loadIframeFallback();
-            } else {
-              loadingEl.style.display = 'none';
-            }
-          }
-        }, 10000);
+      var url = 'https://' + MICROCMS_SERVICE + '.microcms.io/api/v1/news?limit=5&orders=-date';
+      fetch(url, {
+        headers: { 'X-MICROCMS-API-KEY': MICROCMS_API_KEY }
+      })
+      .then(function(res) {
+        if (!res.ok) throw new Error('API error: ' + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        renderNews(data.contents);
+      })
+      .catch(function() {
+        showError();
       });
     })();
 
