@@ -481,39 +481,128 @@
 
     /* ── About Section with Glassmorphism ── */
     .about {
-      background:
-        linear-gradient(135deg, #faf6f0 0%, #f5f0e8 100%);
-      max-width: 1000px;
-      margin: 0 auto;
-      text-align: center;
+      background: linear-gradient(160deg, #1a0e06 0%, #2d1a0e 50%, #1a0e06 100%);
       padding: 10rem 2rem;
       position: relative;
+      overflow: hidden;
     }
 
     .about::before {
       content: '';
       position: absolute;
-      top: -50px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 200px;
-      background: radial-gradient(circle, rgba(196, 106, 44, 0.1) 0%, transparent 70%);
+      top: 15%;
+      left: 5%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(196, 106, 44, 0.07) 0%, transparent 70%);
       border-radius: 50%;
-      filter: blur(40px);
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    .about::after {
+      content: '';
+      position: absolute;
+      bottom: 15%;
+      right: 5%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(196, 106, 44, 0.05) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    .about-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about .section-label {
+      color: var(--color-gold);
+    }
+
+    .about .section-title {
+      color: var(--color-white);
     }
 
     .about .gold-line {
-      margin: 0 auto 2.5rem;
+      margin: 0 auto 3rem;
     }
 
     .about-text {
       font-size: 1.05rem;
-      line-height: 2.6;
-      color: #3a3a3a;
+      line-height: 2.8;
+      color: rgba(245, 240, 232, 0.8);
       letter-spacing: 0.08em;
-      max-width: 700px;
+      max-width: 600px;
       margin: 0 auto;
+    }
+
+    .about-features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin: 4rem 0;
+    }
+
+    .about-feature {
+      padding: 2.5rem 1.5rem;
+      border: 1px solid rgba(196, 106, 44, 0.25);
+      position: relative;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .about-feature::before,
+    .about-feature::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-color: var(--color-gold);
+      border-style: solid;
+    }
+
+    .about-feature::before {
+      top: -1px;
+      left: -1px;
+      border-width: 2px 0 0 2px;
+    }
+
+    .about-feature::after {
+      bottom: -1px;
+      right: -1px;
+      border-width: 0 2px 2px 0;
+    }
+
+    .about-feature:hover {
+      background: rgba(196, 106, 44, 0.07);
+      border-color: rgba(196, 106, 44, 0.5);
+    }
+
+    .about-feature-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--color-gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .about-feature-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-white);
+      letter-spacing: 0.12em;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .about-features {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
     }
 
     .anniversary {
@@ -521,24 +610,44 @@
       align-items: center;
       justify-content: center;
       gap: 2rem;
-      margin-top: 4rem;
-      padding: 3rem;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      border: 1px solid rgba(196, 106, 44, 0.1);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+      margin-top: 5rem;
+      padding: 3.5rem 3rem;
+      background: rgba(196, 106, 44, 0.05);
+      border: 1px solid rgba(196, 106, 44, 0.3);
+      position: relative;
+    }
+
+    .anniversary::before,
+    .anniversary::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-color: var(--color-gold);
+      border-style: solid;
+    }
+
+    .anniversary::before {
+      top: -1px;
+      left: -1px;
+      border-width: 2px 0 0 2px;
+    }
+
+    .anniversary::after {
+      bottom: -1px;
+      right: -1px;
+      border-width: 0 2px 2px 0;
     }
 
     .anniversary-line {
       flex: 1;
-      max-width: 100px;
-      height: 2px;
-      background: linear-gradient(to right, transparent, var(--color-gold));
+      max-width: 80px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(196, 106, 44, 0.6));
     }
 
     .anniversary-line:last-child {
-      background: linear-gradient(to left, transparent, var(--color-gold));
+      background: linear-gradient(to left, transparent, rgba(196, 106, 44, 0.6));
     }
 
     .anniversary-center {
@@ -548,25 +657,25 @@
     }
 
     .anniversary-number {
-      font-size: 3rem;
+      font-size: 4.5rem;
       font-weight: 900;
-      color: var(--color-deep);
+      color: var(--color-gold);
       line-height: 1;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.2em;
     }
 
     .anniversary-label {
       font-size: 0.85rem;
-      letter-spacing: 0.15em;
-      color: var(--color-gold);
-      margin-top: 1rem;
+      letter-spacing: 0.2em;
+      color: var(--color-white);
+      margin-top: 1.2rem;
       font-weight: 700;
     }
 
     .anniversary-year-end {
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      color: #999;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: rgba(245, 240, 232, 0.45);
       margin-top: 0.5rem;
     }
 
@@ -1454,27 +1563,45 @@
 
   <!-- About -->
   <section class="about" id="about">
-    <div class="reveal">
-      <p class="section-label">当店について</p>
-      <h2 class="section-title">樺太<span class="accent">食堂</span></h2>
-      <div class="gold-line"></div>
-      <p class="about-text">
-        ノシャップ岬の先っぽ、<br>
-        日本海と利尻富士が目の前にある食堂です。<br><br>
-        昭和51年の創業から、ずっとこの場所で<br>
-        北の海で獲れた新鮮なうに・いくら・ほたてを<br>
-        シンプルにどんぶりに盛ってお出ししています。<br><br>
-        一番人気は「無敵の生うに丼」。<br>
-        ぜひ一度、食べにいらしてください。
-      </p>
-      <div class="anniversary">
-        <div class="anniversary-line"></div>
-        <div class="anniversary-center">
-          <div class="anniversary-number">五十年</div>
-          <span class="anniversary-label">おかげさまで創業五十年</span>
-          <span class="anniversary-year-end">昭和51年（1976）創業</span>
+    <div class="about-inner">
+      <div class="reveal">
+        <p class="section-label">当店について</p>
+        <h2 class="section-title">樺太<span class="accent">食堂</span></h2>
+        <div class="gold-line"></div>
+      </div>
+      <div class="about-features reveal">
+        <div class="about-feature">
+          <p class="about-feature-label">LOCATION</p>
+          <p class="about-feature-title">ノシャップ岬の<br>先っぽ</p>
         </div>
-        <div class="anniversary-line"></div>
+        <div class="about-feature">
+          <p class="about-feature-label">SPECIALTY</p>
+          <p class="about-feature-title">無敵の<br>生うに丼</p>
+        </div>
+        <div class="about-feature">
+          <p class="about-feature-label">SINCE 1976</p>
+          <p class="about-feature-title">創業<br>五十年</p>
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="about-text">
+          ノシャップ岬の先っぽ、<br>
+          日本海と利尻富士が目の前にある食堂です。<br><br>
+          昭和51年の創業から、ずっとこの場所で<br>
+          北の海で獲れた新鮮なうに・いくら・ほたてを<br>
+          シンプルにどんぶりに盛ってお出ししています。<br><br>
+          一番人気は「無敵の生うに丼」。<br>
+          ぜひ一度、食べにいらしてください。
+        </p>
+        <div class="anniversary">
+          <div class="anniversary-line"></div>
+          <div class="anniversary-center">
+            <div class="anniversary-number">五十年</div>
+            <span class="anniversary-label">おかげさまで創業五十年</span>
+            <span class="anniversary-year-end">昭和51年（1976）創業</span>
+          </div>
+          <div class="anniversary-line"></div>
+        </div>
       </div>
     </div>
   </section>
