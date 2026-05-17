@@ -14,7 +14,7 @@ function WaveDivider() {
         <defs>
           <linearGradient id="skyWash" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0" stopColor="var(--paper)" stopOpacity="0" />
-            <stop offset="1" stopColor="var(--sea-pale)" stopOpacity="0.35" />
+            <stop offset="1" stopColor="var(--paper)" stopOpacity="1" />
           </linearGradient>
         </defs>
         <rect width="1440" height="280" fill="url(#skyWash)" />
