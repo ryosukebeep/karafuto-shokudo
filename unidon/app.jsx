@@ -138,25 +138,7 @@ function Hero() {
           </h1>
           <p className="hero-loc">北海道・稚内市 ノシャップ岬</p>
         </div>
-        <div className="hero-photo" aria-label="メインビジュアル プレースホルダー">
-          <div className="hero-placeholder">
-            <div className="frame">
-              <span className="corners"></span>
-              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <ellipse cx="32" cy="26" rx="22" ry="5" />
-                <path d="M 10,26 Q 12,44 32,46 Q 52,44 54,26" />
-                <line x1="42" y1="10" x2="54" y2="22" />
-                <line x1="46" y1="8"  x2="58" y2="20" />
-                <path d="M 26,18 q -2,-4 0,-8" opacity=".6" />
-                <path d="M 32,16 q -2,-4 0,-10" opacity=".6" />
-                <path d="M 38,18 q -2,-4 0,-8" opacity=".6" />
-              </svg>
-            </div>
-            <div className="meta-tag">Main Visual</div>
-            <div className="meta-title">看板メニュー うにいくら丼</div>
-            <div className="meta-spec">推奨サイズ 2000 × 1500 px 以上 / 斜め俯瞰</div>
-          </div>
-        </div>
+        <div className="hero-photo" aria-label="ノシャップ岬の夕焼け"></div>
       </div>
       <WaveDivider />
     </section>

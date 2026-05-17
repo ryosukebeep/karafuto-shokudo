@@ -408,11 +408,9 @@ section.sec { padding: clamp(64px, 8vw, 120px) 0; position: relative; }
   overflow: hidden;
   border-top-left-radius: 16px;
   border-bottom-left-radius: 16px;
-  background:
-    linear-gradient(135deg,
-      oklch(0.985 0.008 70) 0%,
-      oklch(0.96 0.020 65) 60%,
-      oklch(0.93 0.030 60) 100%);
+  background-image: url("uploads/GXMLRFraEAAdRz7.jpeg");
+  background-size: cover;
+  background-position: center;
   box-shadow:
     -16px 24px 50px -28px oklch(from var(--ink) l c h / .15),
     inset 2px 0 0 var(--paper);
@@ -554,7 +552,9 @@ section.sec { padding: clamp(64px, 8vw, 120px) 0; position: relative; }
 .about-photo {
   position: relative;
   aspect-ratio: 1 / 1;
-  background-image: linear-gradient(160deg, var(--sea-pale) 0%, var(--sea) 45%, var(--sea-deep) 100%);
+  background-image: url("uploads/GYNGeQLakAMuPA7.jpeg");
+  background-size: cover;
+  background-position: center top;
   background-color: var(--sea);
   /* hand-brushed circle with strong irregular edge */
   clip-path: polygon(
@@ -1150,14 +1150,14 @@ section.sec { padding: clamp(64px, 8vw, 120px) 0; position: relative; }
 }
 
 /* ─── Placeholder palette helpers (direct backgrounds) ─────── */
-.ph-unidon  { background-image: linear-gradient(135deg, var(--uni) 0%, var(--uni-deep) 50%, var(--ikura) 100%); }
-.ph-shop    { background-image: linear-gradient(160deg, var(--sea-pale) 0%, var(--sea) 70%, var(--sea-deep) 100%); }
-.ph-sunset  { background-image: linear-gradient(180deg, oklch(0.78 0.10 60) 0%, var(--uni) 50%, var(--ikura) 100%); }
-.ph-ice     { background-image: linear-gradient(180deg, var(--sea-pale) 0%, oklch(0.85 0.04 220) 60%, var(--sea) 100%); }
+.ph-unidon  { background-image: url("uploads/IMG_2449.JPG"); background-size: cover; background-position: center; }
+.ph-shop    { background-image: url("uploads/S__8282147.jpg"); background-size: cover; background-position: center; }
+.ph-sunset  { background-image: url("uploads/GXMLRFraEAAdRz7.jpeg"); background-size: cover; background-position: center; }
+.ph-ice     { background-image: url("uploads/FpoilsfaIAAhc6d.jpeg"); background-size: cover; background-position: center; }
 .ph-int     { background-image: linear-gradient(135deg, oklch(0.55 0.05 60) 0%, oklch(0.30 0.04 60) 100%); }
 .ph-notice  { background-image: linear-gradient(135deg, var(--paper-2), var(--paper-edge)); }
-.ph-shop-s  { background-image: linear-gradient(160deg, var(--sea-pale), var(--sea)); }
-.ph-ice-s   { background-image: linear-gradient(180deg, var(--sea-pale), oklch(0.85 0.04 220)); }
+.ph-shop-s  { background-image: url("uploads/GYNGeQLakAMuPA7.jpeg"); background-size: cover; background-position: center; }
+.ph-ice-s   { background-image: url("uploads/FpoilsfaIAAhc6d.jpeg"); background-size: cover; background-position: center; }
 
 /* ─── Responsive ──────────────────────────────────── */
 @media (max-width: 960px) {
