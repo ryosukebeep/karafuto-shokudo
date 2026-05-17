@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>樺太食堂 ｜ 無敵の生うに丼 ｜ 北海道・稚内市 ノシャップ岬</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&family=Klee+One:wght@400;600&family=Yuji+Syuku&family=Yusei+Magic&family=Yomogi&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&family=Caveat:wght@400;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="styles.css" />
+
+<style>
+  /* Decoration toggle */
+  [data-decor="off"] body::before { display: none; }
+  [data-decor="off"] .wave-divider { display: none; }
+  [data-decor="off"] .hero-sun { display: none; }
+  [data-decor="off"] .hero-tag::before { display: none; }
+  [data-decor="off"] .sec-title::after { display: none; }
+  [data-decor="off"] .about-anniv .rays { display: none; }
+  [data-decor="off"] .foot::before { display: none; }
+  [data-decor="off"] .about-anniv {
+    -webkit-mask-image: none; mask-image: none;
+    border: 1px solid var(--paper-edge);
+  }
+</style>
+</head>
+<body>
+
+<!-- Reusable SVG filter defs — referenced via filter: url(#id) -->
+<svg class="svg-filters" aria-hidden="true">
+  <defs>
+    <filter id="brushEdge" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.045" numOctaves="2" seed="3" />
+      <feDisplacementMap in="SourceGraphic" scale="8" />
+    </filter>
+    <filter id="roughedge" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="2" />
+      <feDisplacementMap in="SourceGraphic" scale="2.5" />
+    </filter>
+    <filter id="paperEdge" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" seed="9" />
+      <feDisplacementMap in="SourceGraphic" scale="5" />
+    </filter>
+  </defs>
+</svg>
+
+<div id="root"></div>
+
+<!-- React + Babel (local) -->
+<script src="vendor/react.development.js"></script>
+<script src="vendor/react-dom.development.js"></script>
+<script src="vendor/babel.min.js"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="wave-divider.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+
+</body>
+</html>
