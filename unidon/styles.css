@@ -307,29 +307,27 @@ section.sec { padding: clamp(64px, 8vw, 120px) 0; position: relative; }
 /* ─── Hero ────────────────────────────────────────── */
 .hero {
   position: relative;
-  padding: clamp(8px, 1vw, 18px) 0 0;
   overflow: hidden;
 }
 .hero-grid {
-  display: grid;
-  grid-template-columns: minmax(360px, 0.78fr) 1fr;
-  gap: clamp(16px, 2.4vw, 32px);
-  align-items: center;
   position: relative;
-  padding-left: max(24px, calc((100vw - 1240px) / 2));
-  padding-right: 0;
+  display: flex;
+  align-items: flex-end;
+  min-height: 70vh;
+  padding: 0;
 }
 .hero-text {
   position: relative;
   z-index: 2;
-  padding-block: clamp(28px, 3.5vw, 56px);
-  padding-right: 24px;
+  padding: clamp(40px, 6vw, 80px) max(32px, calc((100vw - 1240px) / 2 + 48px));
+  padding-top: 0;
+  color: var(--paper);
 }
 .hero-tag {
   font-family: var(--f-hand);
   font-size: clamp(22px, 2.6vw, 32px);
   line-height: 1.55;
-  color: var(--ink);
+  color: var(--paper);
   margin: 0 0 12px;
   position: relative;
   display: inline-block;
@@ -382,18 +380,19 @@ section.sec { padding: clamp(64px, 8vw, 120px) 0; position: relative; }
   font-size: clamp(54px, 7.0vw, 100px);
   letter-spacing: .12em;
   line-height: 1;
-  color: var(--ink);
+  color: var(--paper);
   margin: 18px 0 20px;
   white-space: nowrap;
   display: flex;
   gap: clamp(2px, 0.3vw, 4px);
+  text-shadow: 0 2px 16px oklch(from var(--ink) l c h / .5);
 }
 .hero-name span { display: inline-block; }
 .hero-loc {
   font-family: var(--f-mincho);
   font-size: clamp(13px, 1.2vw, 16px);
   letter-spacing: .25em;
-  color: var(--ink-2);
+  color: oklch(from var(--paper) l c h / .85);
 }
 .hero-loc::before {
   content: "—";
@@ -402,19 +401,24 @@ section.sec { padding: clamp(64px, 8vw, 120px) 0; position: relative; }
 }
 
 .hero-photo {
-  position: relative;
-  height: clamp(340px, 42vw, 520px);
-  width: 100%;
-  overflow: hidden;
-  border-top-left-radius: 16px;
-  border-bottom-left-radius: 16px;
+  position: absolute;
+  inset: 0;
   background-image: url("uploads/GXMLRFraEAAdRz7.jpeg");
   background-size: cover;
-  background-position: center;
-  box-shadow:
-    -16px 24px 50px -28px oklch(from var(--ink) l c h / .15),
-    inset 2px 0 0 var(--paper);
+  background-position: center 30%;
   isolation: isolate;
+}
+.hero-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    oklch(from var(--ink) l c h / .75) 0%,
+    oklch(from var(--ink) l c h / .35) 50%,
+    oklch(from var(--ink) l c h / .10) 100%
+  );
+  z-index: 1;
 }
 .hero-photo::before {
   content: "";
