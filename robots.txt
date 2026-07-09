@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /unidon/
+Disallow: /thank-you.html
+
+Sitemap: https://unidon.jp/sitemap.xml
