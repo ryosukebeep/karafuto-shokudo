@@ -4,17 +4,19 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' 'unsafe-inline' https://www.googletagmanager.com;
+    script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     img-src 'self' data: blob: https:;
-    frame-src https://www.google.com https://docs.google.com;
-    connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com https://*.microcms.io https://*.microcms-assets.io;
+    frame-src https://www.google.com https://docs.google.com https://challenges.cloudflare.com;
+    connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com https://*.microcms.io https://*.microcms-assets.io https://challenges.cloudflare.com;
     form-action 'self' https://docs.google.com;
   ">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKCC5715LR"></script>
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -1615,10 +1617,9 @@
       <p class="section-label">お問い合わせ</p>
       <h2 class="section-title"><span class="accent">ご質問</span>など</h2>
       <div class="gold-line"></div>
-      <iframe name="hidden-iframe" id="hidden-iframe" style="display:none"></iframe>
       <form id="contact-form" class="contact-form"
-            action="https://docs.google.com/forms/d/e/1FAIpQLScVvrHe8YlZ_rTAiFJRAgmxhtF56sxjmJWjbv-YRkPAZsVeLQ/formResponse"
-            method="POST" target="hidden-iframe">
+            action="/api/contact"
+            method="POST">
         <!-- ハニーポット（ボット誘引用の隠しフィールド） -->
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
         <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
@@ -1643,6 +1644,7 @@
           <label for="message">お問い合わせ内容</label>
           <textarea id="message" name="entry.1523612294" rows="6" required></textarea>
         </div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAD9JckDLwia2P-uc" style="margin:1rem 0;"></div>
         <button type="submit" class="form-submit" id="form-submit-btn" disabled><span>送信する</span></button>
       </form>
       <script>
@@ -1703,12 +1705,11 @@
             submissions.push(now);
             try { localStorage.setItem(rateKey, JSON.stringify(submissions)); } catch(err) {}
 
-            // 送信処理
+            // ここまでのチェックを通過したら通常のフォーム送信として /api/contact へPOSTする
+            // （e.preventDefault() はしない。中継関数側でTurnstile検証を行い、成功時に
+            // thank-you.html へリダイレクトする）
             submitBtn.disabled = true;
             submitBtn.querySelector('span').textContent = '送信中...';
-            setTimeout(function() {
-              window.location.href = 'thank-you.html';
-            }, 1000);
           });
         })();
       </script>
